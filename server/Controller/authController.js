@@ -1,18 +1,9 @@
 const AgencySchema = require("../model/AgencyModel")
 const bcrypt = require("bcryptjs")
 const register = async (req,res)=>{
-    const {
-        companyName,
-        email,
-        password,
-        confirmPassword,
-        contactNumber,
-        managerName,
-        registrationId,
-        country,
-        state,
-        district} =req.body
-        console.log(companyName)
+
+    const {companyName,email,password,confirmPassword,contactNumber,managerName,registrationId,country,state,district} = req.body
+    console.log(req.body)
 
     try {
         if(password != confirmPassword){
