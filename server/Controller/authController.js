@@ -1,8 +1,8 @@
 const AgencySchema = require("../model/AgencyModel")
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcrypt")
 const register = async (req,res)=>{
 
-    const {companyName,email,password,confirmPassword,contactNumber,managerName,registrationId,country,state,district} = req.body
+    const {companyName,email,password,confirmPassword,contactNumber,registrationId,country,state,district,nameOfManager} = req.body
     console.log(req.body)
 
     try {
@@ -25,8 +25,6 @@ const register = async (req,res)=>{
             country,
             state,
             district
-    
-           
        })
        await newAgency.save()
        console.log(newAgency);
