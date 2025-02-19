@@ -20,47 +20,49 @@ function SignUp() {
   const navigate = useNavigate();
   const handleChange = (e)=>{
     setFormData({...formData,[e.target.name]: e.target.value})
+    console.log(formData)
   }
 
-  const validateForm = ()=>{
-    let newErrors = {};
 
-    for (let key in formData){
-      if(!formData[key].trim()){
-        newErrors[key] = "This field is required";
-      }
-    }
+  // const validateForm = ()=>{
+  //   let newErrors = {};
 
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Enter a valid email address";
-    }
+  //   for (let key in formData){
+  //     if(!formData[key].trim()){
+  //       newErrors[key] = "This field is required";
+  //     }
+  //   }
 
-    if (formData.password.length < 8){
-      newErrors.password = "Password must be at least 8 characters Long"
-    }
+  //   if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+  //     newErrors.email = "Enter a valid email address";
+  //   }
 
-    if (formData.password !== formData.confirmPassword){
-      newErrors.confirmPassword = "Password do not match"
-    }
+  //   if (formData.password.length < 8){
+  //     newErrors.password = "Password must be at least 8 characters Long"
+  //   }
 
-    if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
-      newErrors.contactNumber = "Enter a valid 10-digit phone number";
-    }
+  //   if (formData.password !== formData.confirmPassword){
+  //     newErrors.confirmPassword = "Password do not match"
+  //   }
+
+  //   if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
+  //     newErrors.contactNumber = "Enter a valid 10-digit phone number";
+  //   }
 
     
-    if (formData.registrationId && !/^[a-zA-Z0-9]+$/.test(formData.registrationId)) {
-      newErrors.registrationId = "Registration ID must be alphanumeric";
-    }
+  //   if (formData.registrationId && !/^[a-zA-Z0-9]+$/.test(formData.registrationId)) {
+  //     newErrors.registrationId = "Registration ID must be alphanumeric";
+  //   }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0
 
-  }
+  // }
 
   const handleSubmit = async  (e)=>{
     e.preventDefault();
-
-    if (!validateForm()) return;
+  
+    // if (!validateForm()) return;
 
     try {
         const response = await register(formData);
@@ -91,12 +93,12 @@ function SignUp() {
          {/*form */}
          
          <form className='space-y-4' onSubmit={handleSubmit}>
-          <input type="text" name='companyName' placeholder={errors.companyName ? errors.companyName : "Company Name"} className='w-full p-2 border rounded' onChange={handleChange}/>
+          <input type="text" name='companyName' placeholder="Company Name" className='w-full p-2 border rounded' onChange={handleChange}/>
           <input type="text" name='email' placeholder='Email Address' className='w-full p-2 border rounded' onChange={handleChange}/>
           <input type="Password" name='password' placeholder='Password' className='w-full p-2 border rounded' onChange={handleChange}/>
           <input type="Password" name='confirmPassword' placeholder='Confirm Password' className='w-full p-2 border rounded' onChange={handleChange}/>
           <input type="text" name='contactNumber' placeholder='Contact Number' className='w-full p-2 border rounded' onChange={handleChange}/>
-          <input type="text" name='nameOfManager' placeholder='Name of Manager' className='w-full p-2 border rounded' onChange={handleChange}/>
+          <input type="text" name='managerName' placeholder='Name of Manager' className='w-full p-2 border rounded' onChange={handleChange}/>
           <input type="text" name='registrationId' placeholder='Registration Id' className='w-full p-2 border rounded' onChange={handleChange}/>
 
           <div className='flex space-x-2'>
