@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useNavigate, NavLink  } from 'react-router-dom'
 import {Toaster,toast} from "react-hot-toast"
 import {login} from "../services/authService"
 
@@ -9,7 +9,7 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
   const [error,setError]=useState("")
-
+  const navigate = useNavigate();
   const validate=()=>{
    let newError={}
    if(!email){
@@ -42,6 +42,7 @@ function SignIn() {
    const response = await login(email,password)
    localStorage.setItem("token",response.token)
    console.log("Login Succussfull",response);
+   navigate("/home")
    
    }catch(error){
     toast.error(error)
