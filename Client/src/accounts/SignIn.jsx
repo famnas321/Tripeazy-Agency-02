@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-
+import {Toaster,toast} from "react-hot-toast"
 import {login} from "../services/authService"
 
 function SignIn() {
@@ -40,9 +40,11 @@ function SignIn() {
    
    try{
    const response = await login(email,password)
-   console.log("Login Succussfull");
+   localStorage.setItem("token",response.token)
+   console.log("Login Succussfull",response);
    
    }catch(error){
+    toast.error(error)
      console.error("Error while Login",error)
    }
 
