@@ -9,3 +9,13 @@ export const register = async (formData) => {
         
     }
 }
+export const login= async (email,password)=>{
+    try{
+         const loginResponse=await axiosInstance.post("/login",{email,password})
+         return loginResponse.data
+    }catch(error){
+        
+        throw error.response?error.response.data:error;
+
+    }
+}

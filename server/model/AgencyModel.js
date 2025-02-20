@@ -14,15 +14,12 @@ const AgencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  confirmPassword: {
-    type: String,
-    required: true,
-  },
+  
   contactNumber: {
     type: Number,
     required: true,
   },
-  nameofManager: {
+  managerName: {
     type: String,
     required: true,
   },
