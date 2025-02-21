@@ -27,14 +27,13 @@ const register = async (req,res)=>{
             registrationId,
             country,
             state,
-            district
-    
-           
+            district,
+            approved: false
        })
        await newAgency.save()
        console.log(newAgency,"data");
        
-        res.status(201).json("user registered successfully")
+        res.status(201).json({message:"user registered successfully wait for admin approvel"})
 
         } catch (error) {
         res.status(500).json({message:"internal error ",error})
