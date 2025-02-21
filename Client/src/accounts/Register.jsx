@@ -31,10 +31,10 @@ function Register() {
         }
       }
   return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center h-screen">
-        <div className="bg-white flex  rounded-2xl shadow-lg w-3/4 p-5 items-center h-fit">
-        <div className="md:w-1/2 px-8 md:px-16">
-        <form className="max-w-sm mx-auto rounded-lg shadow-xl overflow-hidden p-6 space-y-10">
+    <div className="bg-gray-800 min-h-screen flex items-center justify-center h-screen">
+       <div className="bg-white flex rounded-2xl shadow-lg w-3/4 p-5 items-center h-full ">
+  <div className="w-1/2 px-8 md:px-16 bg-white h-full flex">
+    <form className="overflow-hidden p-6 space-y-10  w-full  ">
         
       <h2 className="text-2xl font-bold text-center">Login</h2>
 
@@ -148,7 +148,7 @@ function Register() {
   />
   <label
     htmlFor="confirmPassword"
-    className=" absolute left-2 text-gray-500 transition-all duration-300
+    className=" mb-4 absolute left-2 text-gray-500 transition-all duration-300
       peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
@@ -161,9 +161,9 @@ function Register() {
     
         </div>
 
-        <div className="md:w-1/2 px-8 md:px-16 bg-blue-950">
+        <div className="md:w-1/2 px-8 md:px-16 bg-blue-950 h-full flex">
 
-        <form className="max-w-sm mx-auto rounded-lg shadow-xl overflow-hidden p-6 space-y-10">
+        <form className="overflow-hidden p-6 space-y-10  w-full">
       <h2 className="text-2xl font-bold text-center text-white">Company Detailes</h2>
 
       {/* <div className='flex justify-center my-4'>
