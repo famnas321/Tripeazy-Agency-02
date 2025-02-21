@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { useNavigate,Link } from 'react-router-dom'
+import { useNavigate  } from 'react-router-dom'
 import { register } from '../services/authService';
+import {Toaster,toast} from "react-hot-toast"
 
 
 function SignUp() {
@@ -24,49 +25,51 @@ function SignUp() {
   }
 
 
-  // const validateForm = ()=>{
-  //   let newErrors = {};
+  const validateForm = ()=>{
+    let newErrors = {};
 
-  //   for (let key in formData){
-  //     if(!formData[key].trim()){
-  //       newErrors[key] = "This field is required";
-  //     }
-  //   }
+    for (let key in formData){
+      if(!formData[key].trim()){
+        newErrors[key] = "This field is required";
+      }
+    }
 
-  //   if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-  //     newErrors.email = "Enter a valid email address";
-  //   }
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+    }
 
-  //   if (formData.password.length < 8){
-  //     newErrors.password = "Password must be at least 8 characters Long"
-  //   }
+    if (formData.password.length < 8){
+      newErrors.password = "Password must be at least 8 characters Long"
+    }
 
-  //   if (formData.password !== formData.confirmPassword){
-  //     newErrors.confirmPassword = "Password do not match"
-  //   }
+    if (formData.password !== formData.confirmPassword){
+      newErrors.confirmPassword = "Password do not match"
+    }
 
-  //   if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
-  //     newErrors.contactNumber = "Enter a valid 10-digit phone number";
-  //   }
+    if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
+      newErrors.contactNumber = "Enter a valid 10-digit phone number";
+    }
 
     
-  //   if (formData.registrationId && !/^[a-zA-Z0-9]+$/.test(formData.registrationId)) {
-  //     newErrors.registrationId = "Registration ID must be alphanumeric";
-  //   }
+    if (formData.registrationId && !/^[a-zA-Z0-9]+$/.test(formData.registrationId)) {
+      newErrors.registrationId = "Registration ID must be alphanumeric";
+    }
 
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0
 
-  // }
+  }
 
   const handleSubmit = async  (e)=>{
     e.preventDefault();
-  
-    // if (!validateForm()) return;
+
+    if (!validateForm()) return ;
 
     try {
+        
         const response = await register(formData);
         console.log("registration successfull",response);
+        toast.success("Registration Successfull")
         navigate("/")
     } catch (error) {
         console.error("error in registration",error);
@@ -79,8 +82,20 @@ function SignUp() {
       <div className='bg-white shadow-lg rounded-2xl flex w-full max-w-4xl overflow-hidden'>
 
         {/* left side image */}
-        <div className='w-1/2 hidden md:block'>
+        {/* <div className='w-1/2 hidden md:block'>
          <img src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Signup" className='w-full h-full object-cover'/>
+        </div> */}
+         <div className="md:block hidden  bg-gray-900 rounded-2xl w-80">
+          <img 
+            className="rounded-2xl h-96 w-80"
+            src="/login.jpeg"
+            alt="Login"
+          />
+          <p className='text-white mb-10 ml-3 mt-3'>WE MAKE IT <br/>
+         EFFORTLESSLY TO TRACK <br/>
+          YOUR CLIENTS <br/>
+          
+          </p>
         </div>
 
         {/* right side form */}
@@ -93,18 +108,26 @@ function SignUp() {
          {/*form */}
          
          <form className='space-y-4' onSubmit={handleSubmit}>
+         {errors.companyName && <p className="text-red-500 text-sm">{errors.companyName}</p>}
           <input type="text" name='companyName' placeholder="Company Name" className='w-full p-2 border rounded' onChange={handleChange}/>
+          {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
           <input type="text" name='email' placeholder='Email Address' className='w-full p-2 border rounded' onChange={handleChange}/>
+          {errors.password && <p className='text-red-500 text-sm'>{errors.password}</p>}
           <input type="Password" name='password' placeholder='Password' className='w-full p-2 border rounded' onChange={handleChange}/>
+          {errors.confirmPassword && <p className='text-red-500 text-sm'>{errors.confirmPassword}</p>}
           <input type="Password" name='confirmPassword' placeholder='Confirm Password' className='w-full p-2 border rounded' onChange={handleChange}/>
+          {errors.contactNumber && <p className='text-red-500 text-sm'>{errors.contactNumber}</p>}
           <input type="text" name='contactNumber' placeholder='Contact Number' className='w-full p-2 border rounded' onChange={handleChange}/>
+          {errors.managerName && <p className='text-red-500 text-sm'>{errors.managerName}</p>}
           <input type="text" name='managerName' placeholder='Name of Manager' className='w-full p-2 border rounded' onChange={handleChange}/>
+          {errors.registrationId && <p className='text-red-500 text-sm'>{errors.registrationId}</p>}
           <input type="text" name='registrationId' placeholder='Registration Id' className='w-full p-2 border rounded' onChange={handleChange}/>
 
           <div className='flex space-x-2'>
-            <input type="text" name='country' placeholder='Country' className='w-1/3 p-2 border rounded' onChange={handleChange}/>
-            <input type="text" name='state' placeholder='State' className='w-1/3 p-2 border rounded' onChange={handleChange}/>
-            <input type="text" name='district' placeholder='District' className='w-1/3 p-2 border rounded' onChange={handleChange}/>
+
+            <input type="text" name='country' placeholder={errors.country?errors.country:'Country'} className='w-1/3 p-2 border rounded' onChange={handleChange}/>
+            <input type="text" name='state' placeholder={errors.state?errors.state:'State'} className='w-1/3 p-2 border rounded' onChange={handleChange}/>
+            <input type="text" name='district' placeholder={errors.district?errors.district:'District'} className='w-1/3 p-2 border rounded' onChange={handleChange}/>
           </div>
           <button className='w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-700 transition'>Signup</button>
          </form>
