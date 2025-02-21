@@ -2,9 +2,8 @@
 import { Routes, Route } from 'react-router-dom'
 // import './App.css'
 import SignIn from './accounts/SignIn'
-import SignUp from './accounts/SignUp'
 import Pending from './components/Pending'
-
+import Register from './accounts/Register'
 
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
       <Routes>
 
         <Route path='/' element={<SignIn/>}/>
-        <Route path='/register' element={<SignUp/>}/>
+        <Route path='/register' element={<Register/>}/>
         <Route path='/pending' element={<Pending/>}/>
 
       </Routes>
