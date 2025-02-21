@@ -39,6 +39,10 @@ const AgencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  approved:{
+    type:Boolean,
+    default:false
+  }
 });
 
 module.exports = mongoose.model("Agency",AgencySchema)
