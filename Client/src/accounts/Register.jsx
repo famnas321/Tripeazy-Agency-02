@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { useState } from 'react';
 import { Country, State, City } from "country-state-city";
+import { login } from '../services/authService';
 
 function Register() {
 
@@ -10,13 +11,15 @@ function Register() {
   
   const [selectedContry,setSelectedContry] =useState(null)
   const [selectedState,setSelectedState] =useState(null)
-   console.log(contries);
+  const [selectedCity,setSelectedCity]=useState(null)
+  const [errors,setErros]=useState({})
+  //  console.log(contries);
    
    const imageRef=useRef(null)
   const [profilePic,setProfilePic]=useState(null)
 
     const [formData, setFormData] = useState({
-        username: "",
+        
         email: "",
         password: "",
         confirmPassword:"",
@@ -25,6 +28,11 @@ function Register() {
         contactNO:"",
         registrationId:"",
       });
+      const handleChange = (e) => {
+       
+        setFormData({...formData,[e.target.name]: e.target.value})
+      };
+      console.log(formData)
 
       const  handleContryChange =(country)=>{
         setSelectedContry(country)
@@ -36,17 +44,20 @@ function Register() {
 
       const handleStatehange = (state)=>{
         setSelectedState(state)
-        console.log(selectedState)
+        
         if(selectedContry){
         setCities(City.getCitiesOfState(selectedContry.isoCode, state.isoCode))
         }
 
       }
-      
+      const handleCityhange= (city)=>{
+
+        setSelectedCity(city.target.value)
+       
+        
+      }
     
-      const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
+     
 
       const handleClick= (e)=>{
         imageRef.current.click()
@@ -57,11 +68,51 @@ function Register() {
         if(file){
           const imageUrl = URL.createObjectURL(file);
           setProfilePic(imageUrl)
+
         }
       }
+
+      console.log(selectedContry)
+      console.log(selectedState)
+      console.log(selectedCity);
+
+      const validate = ()=>{
+        let newErrors={}
+        for( let key in formData){
+          if(!formData[key].trim()){
+            newErrors[key]="*required field"
+          }
+        }
+        if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          newErrors.email = "Enter a valid email address";
+        }
+    
+        if (formData.password.length < 8){
+          newErrors.password = "Password must be at least 8 characters Long"
+        }
+    
+        if (formData.password !== formData.confirmPassword){
+          newErrors.confirmPassword = "Password do not match"
+        }
+    
+        if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
+          newErrors.contactNumber = "Enter a valid 10-digit phone number";
+        }
+        setErros(newErrors)
+        return Object.keys(newErrors).length === 0
+      }
+     
+      const handleFormSubmit =(e)=>{
+        e.preventDefault()
+       if(!validate ()){
+        return
+       }
+      }
+
+
   return (
     <div className="bg-white min-h-screen flex items-center justify-center h-screen">
-       <div className="bg-white flex rounded-2xl shadow-lg w-3/4 p-5 items-center h-full ">
+       <div className="bg-white flex rounded-4xl shadow-xl w-3/4 p-5 items-center h-screen ">
   <div className="w-1/2 px-8 md:px-16 bg-white h-full flex">
     <form className="overflow-hidden p-6 space-y-10  w-full  ">
         
@@ -110,12 +161,15 @@ function Register() {
   />
   <label
     htmlFor="companyName"
-    className=" absolute left-2 text-gray-500 transition-all duration-300
+    className=" absolute left-2  transition-all duration-300
       peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
+      // {$errors.companyName ? 'text-gray-500' :'text-red-600'}
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-    Company Name
+   {errors.companyName && !formData.companyName? <p className='text-red-600'>{errors.companyName}</p>: " Company Name" }
+   
+   
   </label>
 </div>
 
@@ -186,13 +240,36 @@ function Register() {
   </label>
 </div>
 
+<div className="relative border-b-2 focus-within:border-blue-500">
+  <input
+    type="nameOfManager"
+    name="nameOfManager"
+    id="nameOfManager"
+    value={formData.nameOfManager}
+    onChange={handleChange}
+    className=" mt-2 w-full appearance-none focus:outline-none bg-transparent p-2 peer"
+    placeholder=" " 
+  />
+  <label
+    htmlFor="nameOfManager"
+    className=" absolute left-2 text-gray-500 transition-all duration-300
+      peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
+      peer-focus:-top-4 peer-focus:text-sm peer-focus:text-white 
+      ${formData.password ? '-top-4 text-sm text-white' : ''}"
+  >
+    Name of Manager
+  </label>
+</div>
+
     </form>
     
         </div>
 
-        <div className="md:w-1/2 px-8 md:px-16 bg-blue-950 h-full flex">
+        <div className="md:w-1/2 px-8 md:px-16 bg-blue-950 h-full flex  round">
 
-        <form className="overflow-hidden p-6 space-y-10  w-full">
+        <form className="overflow-hidden p-6 space-y-10  w-full  rounded-tl-lg rounded-bl-lg"
+        onSubmit={handleFormSubmit}
+        >
       <h2 className="text-2xl font-bold text-center text-white">COMPANY DETAILES</h2>
 
       {/* <div className='flex justify-center my-4'>
@@ -222,26 +299,7 @@ function Register() {
 
 
       
-      <div className="relative border-b-2 focus-within:border-blue-500">
-  <input
-    type="nameOfManager"
-    name="nameOfManager"
-    id="nameOfManager"
-    value={formData.nameOfManager}
-    onChange={handleChange}
-    className=" mt-2 w-full appearance-none focus:outline-none bg-transparent p-2 peer"
-    placeholder=" " 
-  />
-  <label
-    htmlFor="nameOfManager"
-    className=" absolute left-2 text-gray-500 transition-all duration-300
-      peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
-      peer-focus:-top-4 peer-focus:text-sm peer-focus:text-white 
-      ${formData.password ? '-top-4 text-sm text-white' : ''}"
-  >
-    Name of Manager
-  </label>
-</div>
+     
 
 
       
@@ -252,7 +310,7 @@ function Register() {
     id="contactNO"
     value={formData.contactNO}
     onChange={handleChange}
-    className=" mt-2 w-full appearance-none focus:outline-none bg-transparent p-2 peer"
+    className=" mt-1 w-full appearance-none focus:outline-none bg-transparent p-2 peer"
     placeholder=" " 
   />
   <label
@@ -290,10 +348,10 @@ function Register() {
 
 </div>
  
-<div className="relative border-b-2 focus-within:border-blue-500 ">
-  <span></span>
+<div className=" mt-2 relative border-b-2 focus-within:border-blue-500 ">
+  <span className= ' text-white '>Select Country</span>
   <select 
-  className='w-full flex'
+  className='w-full flex mt-2'
   onChange={(e=>{
     handleContryChange( 
       contries.find((c)=> c.isoCode === e.target.value)
@@ -315,9 +373,10 @@ function Register() {
     <div className=" focus-within:border-blue-500 flex  ">
     
     <div className="w-1/2  rounded">
+    <span className='text-white'>Select State</span>
     
   <select 
-  className=' w-full  flex '
+  className=' w-full  flex mt-2'
   disabled={!selectedContry}
   onChange={(e=>{
     handleStatehange( 
@@ -334,15 +393,14 @@ function Register() {
     ))}
   </select>
   </div>
-  <div className="w-1/2   rounded">
+  <div className="w-1/2   rounded ">
+  <span className='text-white'>Select State</span>
   <select 
-  className='w-full flex ml-1'
+  className='w-full flex ml-1 mt-2'
   disabled={!selectedContry}
-  // onChange={(e=>{
-  //   handleCityhange( 
-  //     state.find((s)=> e.isoCode === e.target.value)
-  //   )
-  // })}
+  onChange={(e)=>handleCityhange(e)}
+    
+  
   name="" id="">
     {cities.map((city)=>(
       
@@ -361,7 +419,7 @@ function Register() {
     {/* </div> */}
  
 
-<div className="relative">
+<div className="relative ">
   <label
     title="Click to upload"
     htmlFor="button2"
@@ -388,10 +446,10 @@ function Register() {
 
 
      
-    <div className="mt-6">
+    <div className="">
         <button
-          onClick={() => window.location.href = '/'} 
-          className="bg-slate-300  text-black black px-6 py-3 rounded-3xl hover:bg-slate-700 transition duration-300 "
+          
+          className= " mt-2 bg-slate-300  text-black black px-6 py-3 rounded-3xl hover:bg-slate-700 transition duration-300 "
         >
           
            Register Detailes
