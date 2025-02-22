@@ -1,9 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import { Country, State, City } from "country-state-city";
-import { login } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
+
+import { register } from '../services/authService';
+
+
 
 function Register() {
+  const navigate=useNavigate()
 
   const [contries,setContries]=useState(Country.getAllCountries())
   const [states,setStates] =useState([])
@@ -27,12 +32,13 @@ function Register() {
         nameOfManager:"",
         contactNO:"",
         registrationId:"",
+        
       });
       const handleChange = (e) => {
        
         setFormData({...formData,[e.target.name]: e.target.value})
       };
-      console.log(formData)
+      
 
       const  handleContryChange =(country)=>{
         setSelectedContry(country)
@@ -71,8 +77,9 @@ function Register() {
 
         }
       }
-
-      console.log(selectedContry)
+      
+      console.log(selectedContry);
+      
       console.log(selectedState)
       console.log(selectedCity);
       console.log(formData);
@@ -84,7 +91,7 @@ function Register() {
         
         for (let key in formData) {
             if (!String(formData[key]).trim()) {
-                newErrors[key] = "*Required field";
+                newErrors[key] = 'Required field';
             }
         }
     
@@ -128,13 +135,39 @@ function Register() {
         setErros(newErrors);
         return Object.keys(newErrors).length === 0; 
       }
-    
-     
-      const handleFormSubmit =(e)=>{
+      
+      //   const countryname= selectedContry?.name || "Unknown";
+      //    console.log(countryname);
+      //  const stateName=selectedState?.name||"Unknown"
+      //  console.log(stateName);
+      //  console.log(selectedCity);
+
+       
+       
+
+      const handleFormSubmit = async (e)=>{
         e.preventDefault()
        if(!validate ()){
         // console.log("validation failed")
         return
+       }
+       setFormData(prev=>({
+        ...prev,
+        countryname:selectedContry?.name || "Unknown",
+        stateName:selectedState?.name||"Unknown",
+       cityName:selectedCity
+
+       }))
+       console.log(formData)
+
+       try{
+        const response= await register(formData)
+        if(response){
+          console.log("Registration succesfull")
+         navigate("/pending")
+        }
+       }catch(error){
+       console.error("Registration fail")
        }
       }
       useEffect(()=>{
@@ -199,7 +232,7 @@ function Register() {
       // {$errors.companyName ? 'text-gray-500' :'text-red-600'}
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-   {errors.companyName && !formData.companyName? <p className='text-red-600'>{errors.companyName}</p>: " Company Name" }
+   {errors.companyName || !formData.companyName? <p className='text-red-600'>{errors.companyName}</p>: " Company Name" }
    
    
   </label>
@@ -224,7 +257,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-   {errors.email || !formData.email? <p className='text-red-600'>{errors.email}</p>: "Email" }
+   {errors.email || !formData.email ? <p className='text-red-600'>{errors.email}</p>: "Email" }
   </label>
 </div>
 
@@ -247,7 +280,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-    {errors.password || !formData.password? <p className='text-red-600'>{errors.password}</p>: "Password" }
+    {errors.password && !formData.password? <p className='text-red-600'>{errors.password}</p>: "Password" }
   </label>
 </div>
    
@@ -268,7 +301,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
- {errors.confirmPassword || !formData.confirmPassword? <p className='text-red-600'>{errors.confirmPassword}</p>: " Confirm Password" }
+ {errors.confirmPassword && !formData.confirmPassword? <p className='text-red-600'>{errors.confirmPassword}</p>: " Confirm Password" }
   </label>
 </div>
 
@@ -289,7 +322,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500
       ${formData.password ? '-top-4 text-sm text-white' : ''}"
   >
-    {errors.nameOfManager || !formData.nameOfManager? <p className='text-red-600'>{errors.nameOfManager}</p>:"Name of Manger"}
+    {errors.nameOfManager && !formData.nameOfManager? <p className='text-red-600'>{errors.nameOfManager}</p>:"Name of Manger"}
   </label>
 </div>
 
@@ -352,7 +385,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-white
       ${formData.password ? '-top-4 text-sm text-white : ''}"
   >
-   {errors.contactNO || !formData.contactNO? <p className='text-red-600'>{errors.contactNO}</p>: "Contact Number" }
+   {errors.contactNO && !formData.contactNO? <p className='text-red-600'>{errors.contactNO}</p>: "Contact Number" }
   </label>
 </div>
    
