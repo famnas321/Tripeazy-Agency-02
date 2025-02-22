@@ -15,11 +15,11 @@ const AgencySchema = new mongoose.Schema({
     required: true,
   },
   
-  contactNumber: {
+  contactNO: {
     type: Number,
     required: true,
   },
-  managerName: {
+  nameOfManager: {
     type: String,
     required: true,
   },
@@ -27,15 +27,15 @@ const AgencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  country: {
+  countryname: {
     type: String,
     required: true,
   },
-  state: {
+  stateName: {
     type: String,
     required: true,
   },
-  district: {
+  cityName: {
     type: String,
     required: true,
   },
