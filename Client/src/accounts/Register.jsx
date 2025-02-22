@@ -12,13 +12,14 @@ function Register() {
   const [selectedContry,setSelectedContry] =useState(null)
   const [selectedState,setSelectedState] =useState(null)
   const [selectedCity,setSelectedCity]=useState(null)
+  const [errors,setErros]=useState({})
   //  console.log(contries);
    
    const imageRef=useRef(null)
   const [profilePic,setProfilePic]=useState(null)
 
     const [formData, setFormData] = useState({
-        username: "",
+        
         email: "",
         password: "",
         confirmPassword:"",
@@ -28,8 +29,10 @@ function Register() {
         registrationId:"",
       });
       const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+       
+        setFormData({...formData,[e.target.name]: e.target.value})
       };
+      console.log(formData)
 
       const  handleContryChange =(country)=>{
         setSelectedContry(country)
@@ -72,6 +75,41 @@ function Register() {
       console.log(selectedContry)
       console.log(selectedState)
       console.log(selectedCity);
+
+      const validate = ()=>{
+        let newErrors={}
+        for( let key in formData){
+          if(!formData[key].trim()){
+            newErrors[key]="*required field"
+          }
+        }
+        if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          newErrors.email = "Enter a valid email address";
+        }
+    
+        if (formData.password.length < 8){
+          newErrors.password = "Password must be at least 8 characters Long"
+        }
+    
+        if (formData.password !== formData.confirmPassword){
+          newErrors.confirmPassword = "Password do not match"
+        }
+    
+        if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
+          newErrors.contactNumber = "Enter a valid 10-digit phone number";
+        }
+        setErros(newErrors)
+        return Object.keys(newErrors).length === 0
+      }
+     
+      const handleFormSubmit =(e)=>{
+        e.preventDefault()
+       if(!validate ()){
+        return
+       }
+      }
+
+
   return (
     <div className="bg-white min-h-screen flex items-center justify-center h-screen">
        <div className="bg-white flex rounded-4xl shadow-xl w-3/4 p-5 items-center h-screen ">
@@ -123,12 +161,15 @@ function Register() {
   />
   <label
     htmlFor="companyName"
-    className=" absolute left-2 text-gray-500 transition-all duration-300
+    className=" absolute left-2  transition-all duration-300
       peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
+      // {$errors.companyName ? 'text-gray-500' :'text-red-600'}
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-    Company Name
+   {errors.companyName && !formData.companyName? <p className='text-red-600'>{errors.companyName}</p>: " Company Name" }
+   
+   
   </label>
 </div>
 
@@ -226,7 +267,9 @@ function Register() {
 
         <div className="md:w-1/2 px-8 md:px-16 bg-blue-950 h-full flex  round">
 
-        <form className="overflow-hidden p-6 space-y-10  w-full  rounded-tl-lg rounded-bl-lg">
+        <form className="overflow-hidden p-6 space-y-10  w-full  rounded-tl-lg rounded-bl-lg"
+        onSubmit={handleFormSubmit}
+        >
       <h2 className="text-2xl font-bold text-center text-white">COMPANY DETAILES</h2>
 
       {/* <div className='flex justify-center my-4'>
@@ -405,7 +448,7 @@ function Register() {
      
     <div className="">
         <button
-          onClick={() => window.location.href = '/'} 
+          
           className= " mt-2 bg-slate-300  text-black black px-6 py-3 rounded-3xl hover:bg-slate-700 transition duration-300 "
         >
           
