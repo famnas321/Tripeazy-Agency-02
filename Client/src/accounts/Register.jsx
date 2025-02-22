@@ -296,6 +296,7 @@ function Register() {
            Register Detailes
         </button>
       </div>
+      <p className='text-white '>Already have an account? <a href="/" className="text-blue-500 hover:text-blue-700">Login</a></p>
 
     </form>
     
