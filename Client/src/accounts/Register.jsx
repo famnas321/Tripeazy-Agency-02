@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import { Country, State, City } from "country-state-city";
 import { login } from '../services/authService';
@@ -75,39 +75,71 @@ function Register() {
       console.log(selectedContry)
       console.log(selectedState)
       console.log(selectedCity);
+      console.log(formData);
+      
 
-      const validate = ()=>{
-        let newErrors={}
-        for( let key in formData){
-          if(!formData[key].trim()){
-            newErrors[key]="*required field"
-          }
+      const validate = () => {
+        let newErrors = {};
+    
+        
+        for (let key in formData) {
+            if (!String(formData[key]).trim()) {
+                newErrors[key] = "*Required field";
+            }
         }
+    
+        
         if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-          newErrors.email = "Enter a valid email address";
+            newErrors.email = "Enter a valid email address";
+        }
+        // if(!formData.email){
+        //   newErrors.email ="reuired field"
+        // }else if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        //   newErrors.email="Enter the valid Email"
+
+        // }
+    
+       
+        if (formData.password && formData.password.length < 8) {
+            newErrors.password = "Password must be at least 8 characters long";
         }
     
-        if (formData.password.length < 8){
-          newErrors.password = "Password must be at least 8 characters Long"
+       
+        if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match";
         }
     
-        if (formData.password !== formData.confirmPassword){
-          newErrors.confirmPassword = "Password do not match"
+        
+        if (formData.contactNO && !/^\d{10}$/.test(formData.contactNO)) {
+            newErrors.contactNO = "Enter a valid 10-digit phone number";
         }
     
-        if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
-          newErrors.contactNumber = "Enter a valid 10-digit phone number";
+        
+        if (!selectedContry) {
+            newErrors.country = "*Required field";
         }
-        setErros(newErrors)
-        return Object.keys(newErrors).length === 0
+        if (!selectedState) {
+            newErrors.state = "*Required field";
+        }
+        if (!selectedCity) {
+            newErrors.city = "*Required field";
+        }
+    
+        setErros(newErrors);
+        return Object.keys(newErrors).length === 0; 
       }
+    
      
       const handleFormSubmit =(e)=>{
         e.preventDefault()
        if(!validate ()){
+        // console.log("validation failed")
         return
        }
       }
+      useEffect(()=>{
+        console.log(errors,"errors are")
+      },[errors])
 
 
   return (
@@ -192,7 +224,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-    Email
+   {errors.email || !formData.email? <p className='text-red-600'>{errors.email}</p>: "Email" }
   </label>
 </div>
 
@@ -215,7 +247,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-    Password
+    {errors.password || !formData.password? <p className='text-red-600'>{errors.password}</p>: "Password" }
   </label>
 </div>
    
@@ -236,7 +268,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-  Confirm Password
+ {errors.confirmPassword || !formData.confirmPassword? <p className='text-red-600'>{errors.confirmPassword}</p>: " Confirm Password" }
   </label>
 </div>
 
@@ -254,10 +286,10 @@ function Register() {
     htmlFor="nameOfManager"
     className=" absolute left-2 text-gray-500 transition-all duration-300
       peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
-      peer-focus:-top-4 peer-focus:text-sm peer-focus:text-white 
+      peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500
       ${formData.password ? '-top-4 text-sm text-white' : ''}"
   >
-    Name of Manager
+    {errors.nameOfManager || !formData.nameOfManager? <p className='text-red-600'>{errors.nameOfManager}</p>:"Name of Manger"}
   </label>
 </div>
 
@@ -310,7 +342,7 @@ function Register() {
     id="contactNO"
     value={formData.contactNO}
     onChange={handleChange}
-    className=" mt-1 w-full appearance-none focus:outline-none bg-transparent p-2 peer"
+    className=" mt-2 w-full appearance-none focus:outline-none bg-transparent p-2 peer"
     placeholder=" " 
   />
   <label
@@ -320,7 +352,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-white
       ${formData.password ? '-top-4 text-sm text-white : ''}"
   >
-    Contact Number
+   {errors.contactNO || !formData.contactNO? <p className='text-red-600'>{errors.contactNO}</p>: "Contact Number" }
   </label>
 </div>
    
@@ -341,7 +373,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-white 
       ${formData.password ? '-top-4 text-sm text-white' : ''}"
   >
-  Registration Id
+ {errors.registrationId && !formData.registrationId? <p className='text-red-600'>{errors.registrationId}</p>: "Registration Id" }
   </label>
    
   
