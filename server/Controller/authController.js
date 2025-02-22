@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const register = async (req,res)=>{
 
-    const {companyName,email,password,confirmPassword,contactNumber,managerName,registrationId,country,state,district} = req.body
+    const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,countryname,stateName,cityName} = req.body
     console.log(req.body)
 
     try {
@@ -22,12 +22,12 @@ const register = async (req,res)=>{
             companyName,
             email,
             password:hashedPassword,
-            contactNumber,
-            managerName,
+            contactNO,
+            nameOfManager,
             registrationId,
-            country,
-            state,
-            district,
+            countryname,
+            stateName,
+            cityName,
             approved: false
        })
        await newAgency.save()
@@ -37,6 +37,7 @@ const register = async (req,res)=>{
 
         } catch (error) {
         res.status(500).json({message:"internal error ",error})
+        console.log(error)
         
     }
 }
