@@ -3,9 +3,9 @@ import { Routes, Route } from 'react-router-dom'
 import SignIn from './accounts/SignIn'
 import Pending from "./accounts/Pending"
 import Register from './accounts/Register'
-import Home from "./Home/Home"
+import Home from "./components/Home/Home"
 
-import NavbarLayout from "./navbar/navbar-layout"
+import NavbarLayout from "./components/navbar/navbar-layout"
 
 
 
