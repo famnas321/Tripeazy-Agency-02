@@ -257,7 +257,7 @@ function Register() {
       peer-focus:-top-4 peer-focus:text-sm peer-focus:text-blue-500 
       ${formData.password ? '-top-4 text-sm text-blue-500' : ''}"
   >
-   {errors.email || !formData.email ? <p className='text-red-600'>{errors.email}</p>: "Email" }
+   {errors.email && !formData.email ? <p className='text-red-600'>{errors.email}</p>: "Email" }
   </label>
 </div>
 
