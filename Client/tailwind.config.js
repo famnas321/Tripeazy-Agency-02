@@ -6,7 +6,7 @@ export default {
   ],
   theme: {
     extend: {
-      colours:{
+      colors:{
         'custom-purple': '#271A4B',
         'custom-Gray': '#F5F6FA',
       }
