@@ -22,12 +22,12 @@ function App() {
     <>
       <Routes>
 
-        <Route path="/" element={<SignIn />} />
+        <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register/>} />
         <Route path="/pending" element={<Pending/>}/>
 
         <Route element={<NavbarLayout/>}>
-          <Route path="/home" element={<Home/>}/>
+          <Route path="/" element={<Home/>}/>
           <Route path='/clients' element={<Clients/>}/>
           <Route path='posts' element={<Post/>}/>
           <Route path='blogs' element={<Blog/>}/>
