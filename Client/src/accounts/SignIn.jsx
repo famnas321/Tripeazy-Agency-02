@@ -42,7 +42,7 @@ function SignIn() {
    const response = await login(email,password)
    localStorage.setItem("token",response.token)
    console.log("Login Succussfull",response);
-   navigate("/home")
+   navigate("/")
    
    }catch(error){
     toast.error(error)
