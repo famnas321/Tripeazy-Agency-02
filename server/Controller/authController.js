@@ -61,7 +61,7 @@ const login = async (req,res)=>{
         },process.env.JWT_SECRET,{expiresIn:"30d"})
         console.log(token,"from token")
 
-        res.status(200).json({message:"Login successfull",user:existingUser,token})
+        res.status(200).json({message:"Login successfull",agency:existingUser,token})
 
     } catch (error) {
         
