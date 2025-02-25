@@ -1,13 +1,18 @@
+import {heroui} from "@heroui/theme"
+
 /** @type {import('tailwindcss').Config} */
-export default {
-    darkMode: ["class"],
-    content: [
+module.exports = {
+  content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src//*.{ts,tsx,js,jsx}",
+    './src/layouts//*.{js,ts,jsx,tsx,mdx}',
+    './src/pages//*.{js,ts,jsx,tsx,mdx}',
+    './src/components//*.{js,ts,jsx,tsx,mdx}',
+    "./node_modules/@heroui/theme/dist//*.{js,ts,jsx,tsx}",
   ],
   theme: {
-  	extend: {
-  		colors: {
+    extend: {
+      colors: {
   			'custom-purple': '#271A4B',
   			'custom-Gray': '#F5F6FA',
   			background: 'hsl(var(--background))',
@@ -51,12 +56,8 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		}
-  	}
+    },
   },
-  plugins: [require("tailwindcss-animate")],
+  darkMode: "class",
+  plugins: [heroui()],
 }

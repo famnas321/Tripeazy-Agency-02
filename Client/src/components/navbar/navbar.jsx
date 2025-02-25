@@ -317,13 +317,14 @@ const UserNavbar = () => {
   return (
     <>
       
-      <div className="hidden md:flex flex-col w-64 text-slate-800 h-full">
-        <div className="flex items-center justify-center h-20 border-b">
+      <div className="hidden md:flex flex-col w-64 text-slate-800 h-full ">
+        <div className="flex items-center justify-center h-20 border-b-2">
+          
           <h1 className="text-2xl font-bold">Tripeazy</h1>
         </div>
-        <nav className="flex-1 p-4 space-y-4">
+        <nav className="flex-1 p-4 space-y-4 ">
           <NavLink
-            to="/home"
+            to="/"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -332,7 +333,7 @@ const UserNavbar = () => {
             Home
           </NavLink>
           <NavLink
-            to="/agencies"
+            to="/clients"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -341,7 +342,7 @@ const UserNavbar = () => {
             Clients
           </NavLink>
           <NavLink
-            to="/users"
+            to="/posts"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -350,7 +351,7 @@ const UserNavbar = () => {
             Posts
           </NavLink>
           <NavLink
-            to="/packages"
+            to="/blogs"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -359,7 +360,7 @@ const UserNavbar = () => {
             Blogs
           </NavLink>
           <NavLink
-            to="/blogs"
+            to="/messages"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -368,7 +369,7 @@ const UserNavbar = () => {
             Messages
           </NavLink>
           <NavLink
-            to="/Admin-List"
+            to="/contact-us"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -386,7 +387,7 @@ const UserNavbar = () => {
             Advertisments
           </NavLink>
           <NavLink
-            to="/advertisments"
+            to="/profile"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-custom-purple text-white" : ""}`
             }
@@ -417,7 +418,7 @@ const UserNavbar = () => {
             <span className="text-xs">Messages</span>
           </NavLink>
           <NavLink
-            to="/profile-settings"
+            to="/profile"
             className={({ isActive }) =>
               `flex flex-col items-center gap-1 ${isActive ? "text-blue-500" : ""}`
             }
@@ -451,36 +452,26 @@ const UserNavbar = () => {
                 Home
               </NavLink>
               <NavLink
-                to="/people"
+                to="/clients"
                 onClick={closeSidebar}
                 className={({ isActive }) =>
                   `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
                 }
               >
                 <FaUsers />
-                Agencies
+                Clients
               </NavLink>
           <NavLink
-            to="/messages"
+            to="/posts"
             className={({ isActive }) =>
               `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
             }
           >
             <FaEnvelope />
-            Users
+            Posts
           </NavLink>
               <NavLink
-                to="/housing"
-                onClick={closeSidebar}
-                className={({ isActive }) =>
-                  `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
-                }
-              >
-                <FaHome />
-                Packages
-              </NavLink>
-              <NavLink
-                to="/events"
+                to="/blogs"
                 onClick={closeSidebar}
                 className={({ isActive }) =>
                   `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
@@ -490,17 +481,27 @@ const UserNavbar = () => {
                 Blogs
               </NavLink>
               <NavLink
-                to="/notifications"
+                to="/messages"
+                onClick={closeSidebar}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
+                }
+              >
+                <FaHome />
+                messages
+              </NavLink>
+              <NavLink
+                to="/contact-us"
                 onClick={closeSidebar}
                 className={({ isActive }) =>
                   `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
                 }
               >
                 <FaBell />
-                Admin List
+                Contact-us
               </NavLink>
               <NavLink
-                to="/create-post"
+                to="/advertisments"
                 onClick={closeSidebar}
                 className={({ isActive }) =>
                   `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}`
@@ -510,26 +511,16 @@ const UserNavbar = () => {
                 Advertisments
               </NavLink>
               <NavLink
-                to="/profile-settings"
+                to="/profile"
                 onClick={closeSidebar}
                 className={({ isActive }) =>
                   `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}` 
                 }
               >
                 <FaUser />
-                Notifications
+                Profile
               </NavLink>
-              <NavLink
-                to="/profile-settings"
-                onClick={closeSidebar}
-                className={({ isActive }) =>
-                  `flex items-center gap-4 p-3 rounded-xl ${isActive ? "bg-blue-600 text-white" : ""}` 
-                }
-              >
-                <FaUser />
-                Notifications
-              </NavLink>
-              
+             
             </nav>
           </div>
         </>
