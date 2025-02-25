@@ -1,24 +1,24 @@
-const AgencySchema = require("../model/AgencyModel")
+const Agency = require("../model/AgencyModel")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const register = async (req,res)=>{
 
     const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,countryname,stateName,cityName} = req.body
-    console.log(req.body)
+     console.log(req.body)
 
     try {
         // if(password != confirmPassword){
         //    return  res.status(400).json("password  do not match")
         // }
-        
-        const existingUser= await AgencySchema.findOne({email})
+        // console.log("register function enterd into try block")
+        const existingUser= await Agency.findOne({email})
         if(existingUser){
            return  res.status(400).json("User already existed")
         }
         
        const salt = await bcrypt.genSalt(10)
        const hashedPassword= await bcrypt.hash(password,salt)
-       const newAgency= new AgencySchema({
+       const newAgency= new Agency({
             companyName,
             email,
             password:hashedPassword,
@@ -28,7 +28,7 @@ const register = async (req,res)=>{
             countryname,
             stateName,
             cityName,
-            approved: false
+            status:"Requested"
        })
        await newAgency.save()
        console.log(newAgency,"data");
