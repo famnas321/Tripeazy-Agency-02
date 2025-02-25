@@ -8,7 +8,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 // import { API_BASE_URL } from "@/utils/constants";
 import { Circles } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-
+import CommonNav from "../navbar/commonNav";
 const Profiles = () => {
   const navigate = useNavigate()
   // const dispatch = useDispatch();
@@ -182,6 +182,7 @@ const Profiles = () => {
 
   return (
     <>
+    <CommonNav/>
     <div className="min-h-screen p-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
