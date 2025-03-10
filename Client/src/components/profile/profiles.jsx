@@ -19,9 +19,9 @@ const Profiles = () => {
     registrationId: "",
     contactNO: "",
     nameOfManager: "",
-    countryname: "",
-    stateName: "",
-    cityName: "",
+    country: "",
+    state: "",
+    city: "",
   });
 
   useEffect(()=>{
@@ -39,6 +39,16 @@ const Profiles = () => {
     fetchAgency();
   },[])
 
+  const logOut = async () =>{
+    try {
+      const response = await axiosInstance.post("/logout");
+      if(response.status === 200){
+        navigate("/login")
+      }
+    } catch (error) {
+      
+    }
+  }
  
 
   const handleFieldChange = (e) => {
@@ -259,6 +269,7 @@ const Profiles = () => {
               Email:
             </label>
             <input
+              disabled
               type="text"
               name="email"
               value={Profile.email}
@@ -274,6 +285,7 @@ const Profiles = () => {
               Registration ID:
             </label>
             <input
+              disabled
               type="text"
               name="registrationId"
               value={Profile.registrationId}
@@ -325,12 +337,12 @@ const Profiles = () => {
             <input
               type="tel"
               name="country"
-              value={Profile.countryname}
+              value={Profile.country}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+            {errors.country && (
+              <p className="text-red-500 text-sm mt-1">{errors.country}</p>
             )}
           </div>
           
@@ -341,7 +353,7 @@ const Profiles = () => {
             <input
               type="text"
               name="state"
-              value={Profile.stateName}
+              value={Profile.state}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -356,7 +368,7 @@ const Profiles = () => {
             <input
               type="text"
               name="city"
-              value={Profile.cityName}
+              value={Profile.city}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -373,7 +385,7 @@ const Profiles = () => {
             Save
           </button>
           <button
-          // onClick={logOut}
+          onClick={logOut}
             className="bg-red-600 text-white px-4 py-2 rounded mt-4 m-2"
           >
             Logout
