@@ -91,7 +91,7 @@ export function Component() {
             <XAxis dataKey="browser" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="visitors" fill="#4285F4" />
+            <Bar dataKey="visitors" fill="#271A4B" />
           </BarChart>
         </CardContent>
         <CardFooter className="flex-col gap-2 text-sm">

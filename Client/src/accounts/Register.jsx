@@ -153,9 +153,9 @@ function Register() {
        }
        setFormData(prev=>({
         ...prev,
-        countryname:selectedContry?.name || "Unknown",
-        stateName:selectedState?.name||"Unknown",
-       cityName:selectedCity
+        country:selectedContry?.name || "Unknown",
+        state:selectedState?.name||"Unknown",
+       city:selectedCity
 
        }))
        console.log(formData)
