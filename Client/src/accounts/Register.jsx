@@ -14,7 +14,7 @@ function Register() {
   const [selectedContry, setSelectedContry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [errors, setErros] = useState({});
+  const [errors,setErrors] = useState({});
 
   const imageRef = useRef(null);
   const [profilePic, setProfilePic] = useState(null);
@@ -103,7 +103,7 @@ function Register() {
       newErrors.city = "*Required field";
     }
 
-    setErros(newErrors);
+    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -112,15 +112,15 @@ function Register() {
     if (!validate()) {
       return;
     }
-    setFormData((prev) => ({
-      ...prev,
+    const updatedFormData = {
+      ...formData,
       countryname: selectedContry?.name || "Unknown",
       stateName: selectedState?.name || "Unknown",
-      cityName: selectedCity,
-    }));
-     console.log(formData)
+      cityName: selectedCity || "Unknown",
+    };
+     console.log(updatedFormData)
     try {
-      const response = await register(formData);
+      const response = await register(updatedFormData);
       if (response) {
         navigate("/pending");
       }
