@@ -1,54 +1,46 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-// import { useSelector, useDispatch } from "react-redux";
-// import { setUserInfo } from "@/redux/slice/auth";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { FaPlus, FaTrash } from "react-icons/fa";
-// import { API_BASE_URL } from "@/utils/constants";
 import { Circles } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-
+import CommonNav from "../navbar/commonNav";
+import axiosInstance from "src/utils/axiosInstance";
 const Profiles = () => {
   const navigate = useNavigate()
-  // const dispatch = useDispatch();
-  // const userinfo = useSelector((state) => state.auth.userInfo);
-  // const [image, setImage] = useState(userinfo?.image || null);
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [Profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    country: "",
+    companyName: "",
     email: "",
-    phone: "",
-    street: "",
-    city: "",
-    gender: "",
+    registrationId: "",
+    contactNO: "",
+    nameOfManager: "",
+    countryname: "",
+    stateName: "",
+    cityName: "",
   });
 
-  // Fetch user profile data on component mount
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
-  //         withCredentials: true,
-  //       });
-  //       setProfile(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //       toast.error("Failed to fetch user data");
-  //     }
-  //   };
+  useEffect(()=>{
 
-  //   fetchData();
-  // }, []);
+    const fetchAgency = async ()=>{
+      try {
+        const response = await axiosInstance.get("/profile");
+        setProfile(response.data)
+         console.log(response.data,"from backend agency details")
+      } catch (error) {
+        
+      }
+    }
 
-  // Handle input field changes
+    fetchAgency();
+  },[])
+
+ 
+
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
@@ -58,15 +50,15 @@ const Profiles = () => {
   const validateFields = () => {
     let tempErrors = {};
 
-    if (!Profile.firstName) tempErrors.firstName = "First name is required";
-    if (!Profile.lastName) tempErrors.lastName = "Last name is required";
-    if (!Profile.username) tempErrors.username = "Username is required";
-    if (!Profile.street) tempErrors.street = "Street is required";
+    if (!Profile.companyName) tempErrors.companyName = "Company name is required";
+    if (!Profile.email) tempErrors.email = "email is required";
+    if (!Profile.registrationId) tempErrors.registrationId = "registrationId is required";
+    if (!Profile.city) tempErrors.city = "city is required";
+    if (!Profile.nameOfManager) tempErrors.nameOfManager = "name of manager is required";
     if (!Profile.country) tempErrors.country = "Country is required";
-    if (!Profile.city) tempErrors.city = "City is required";
-    if (!Profile.gender) tempErrors.gender = "Gender is required";
+    if (!Profile.state) tempErrors.state = "State is required";
     if (!Profile.phone) {
-      tempErrors.phone = "Phone number is required";
+      tempErrors.phone = "phone number is required";
     } else if (Profile.phone.length !== 10) {
       tempErrors.phone = "Phone number must be exactly 10 digits";
     }
@@ -77,40 +69,39 @@ const Profiles = () => {
 
   const handleSave = async () => {
     if (validateFields()) {
-      try {
-        const { data } = await axios.put(
-          // `${API_BASE_URL}/api/auth/profile`,
-          Profile,
-          { withCredentials: true }
-        );
+      // try {
+      //   const { data } = await axios.put(
+      //     // `${API_BASE_URL}/api/auth/profile`,
+      //     Profile,
+      //     { withCredentials: true }
+      //   );
 
      
-        dispatch(setUserInfo(data.user));
-        toast.success("Profile details submitted successfully!");
-      } catch (error) {
-        if (error.response?.data?.message === "Phone number already exists") {
-          setErrors((prev) => ({
-            ...prev,
-            phone: error.response.data.message,
-          }));
-        } else {
-          toast.error("Failed to update profile");
-        }
-      }
+      //   dispatch(setUserInfo(data.user));
+      //   toast.success("Profile details submitted successfully!");
+      // } catch (error) {
+      //   if (error.response?.data?.message === "Phone number already exists") {
+      //     setErrors((prev) => ({
+      //       ...prev,
+      //       phone: error.response.data.message,
+      //     }));
+      //   } else {
+      //     toast.error("Failed to update profile");
+      //   }
+      // }
     }
   };
 
 
-  const logOut = async ()=>{
-    const response = await axios.get(`${API_BASE_URL}/api/auth/logout`,{
-      withCredentials:true
-    })
-    if(response.status === 200){
-      console.log('set nigga');
-      dispatch(setUserInfo(undefined));
-      navigate("/login")
-    }
-  }
+  //  const response = await axios.get(`${API_BASE_URL}/api/auth/logout`,{
+  //     withCredentials:true
+  //   })
+  //   if(response.status === 200){
+  //     console.log('set nigga');
+  //     dispatch(setUserInfo(undefined));
+  //     navigate("/login")
+  //   }
+  // }
   const handleImage = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -143,7 +134,8 @@ const Profiles = () => {
       setLoading(false);
     }
   };
-  
+  //   const logOut = async ()=>{
+ 
   const deleteImage = async () => {
     setLoading(true);
     try {
@@ -182,12 +174,13 @@ const Profiles = () => {
 
   return (
     <>
+    <CommonNav/>
     <div className="min-h-screen p-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-xl font-bold text-gray-700">
-            Welcome, {Profile.firstName} {Profile.lastName}
+            Welcome, {Profile.companyName} {Profile.lastName}
           </h2>
         </div>
       </div>
@@ -239,32 +232,21 @@ const Profiles = () => {
             />
           </div>
           <h3 className="text-lg font-semibold mt-4">
-            {Profile.firstName} <span>{Profile.lastName}</span>
+            {Profile.companyName} <span>{Profile.lastName}</span>
           </h3>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-700">
-              Email:
-            </label>
-            <input
-              type="text"
-              name="email"
-              value={Profile.email}
-              disabled
-              className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
-            />
-          </div>
+         
         </div>
 
         {/* Right Section */}
         <div className="flex-1">
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              First Name:
+              Company Name:
             </label>
             <input
               type="text"
-              name="firstName"
-              value={Profile.firstName}
+              name="companyName"
+              value={Profile.companyName}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -274,12 +256,12 @@ const Profiles = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              Last Name:
+              Email:
             </label>
             <input
               type="text"
-              name="lastName"
-              value={Profile.lastName}
+              name="email"
+              value={Profile.email}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -289,12 +271,12 @@ const Profiles = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              Country:
+              Registration ID:
             </label>
             <input
               type="text"
-              name="country"
-              value={Profile.country}
+              name="registrationId"
+              value={Profile.registrationId}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -304,12 +286,13 @@ const Profiles = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              City:
+              Phone:
             </label>
             <input
               type="text"
-              name="city"
-              value={Profile.city}
+              name="phone"
+              value={Profile.contactNO
+              }
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -322,12 +305,12 @@ const Profiles = () => {
         <div className="flex-1">
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              Username:
+              Name of Manager:
             </label>
             <input
               type="text"
-              name="username"
-              value={Profile.username}
+              name="nameOfManager"
+              value={Profile.nameOfManager}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -337,12 +320,12 @@ const Profiles = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              Phone:
+              Country:
             </label>
             <input
               type="tel"
-              name="phone"
-              value={Profile.phone}
+              name="country"
+              value={Profile.countryname}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -350,14 +333,15 @@ const Profiles = () => {
               <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
             )}
           </div>
+          
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              Street:
+              State:
             </label>
             <input
               type="text"
-              name="street"
-              value={Profile.street}
+              name="state"
+              value={Profile.stateName}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
             />
@@ -367,20 +351,17 @@ const Profiles = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
-              Gender:
+              City:
             </label>
-            <select
-              name="gender"
-              value={Profile.gender}
+            <input
+              type="text"
+              name="city"
+              value={Profile.cityName}
               onChange={handleFieldChange}
               className="mt-2 block w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            {errors.gender && (
-              <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+            />
+            {errors.street && (
+              <p className="text-red-500 text-sm mt-1">{errors.street}</p>
             )}
           </div>
 
@@ -392,7 +373,7 @@ const Profiles = () => {
             Save
           </button>
           <button
-          onClick={logOut}
+          // onClick={logOut}
             className="bg-red-600 text-white px-4 py-2 rounded mt-4 m-2"
           >
             Logout
