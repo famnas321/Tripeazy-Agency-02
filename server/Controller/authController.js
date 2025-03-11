@@ -77,6 +77,21 @@ const login = async (req,res)=>{
     }
 }
 
+const logout = async (req,res)=>{
+    const token = req.cookies.token;
+    if(!token){
+        return res.status(401).json({message:"unauthorized: no token provided"})
+
+    }
+
+    try {
+        res.clearCookie("token")
+        res.status(200).json({message:"logout successfull"})
+    } catch (error) {
+        
+    }
+}
+
 
 const agencyFetch = async (req,res)=>{
    
@@ -92,4 +107,5 @@ const agencyFetch = async (req,res)=>{
     }
 }
 
-module.exports = {register,login,agencyFetch}
+
+module.exports = {register,login,agencyFetch,logout}
