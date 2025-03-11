@@ -23,22 +23,25 @@ const Profiles = () => {
     country: "",
     state: "",
     city: "",
+    image: "",
   });
 
   useEffect(()=>{
+    
 
     const fetchAgency = async ()=>{
       try {
         const response = await axiosInstance.get("/profile");
         setProfile(response.data)
          console.log(response.data,"from backend agency details")
+         console.log(Profile.image,"image url")
       } catch (error) {
         
       }
     }
 
     fetchAgency();
-  },[])
+  },[image])
 
   const logOut = async () =>{
     try {
@@ -187,9 +190,9 @@ const Profiles = () => {
           >
             <Avatar className="h-24 w-24 md:w-32 md:h-32 rounded-full overflow-hidden">
 
-              {image ? (
+              {Profile.image ? (
                 <AvatarImage
-                  src={image}
+                  src={Profile.image}
                   alt="profile"
                   className="object-cover w-full h-full bg-black"
                 />
