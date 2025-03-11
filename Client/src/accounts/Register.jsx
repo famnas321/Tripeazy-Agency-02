@@ -365,6 +365,8 @@ function Register() {
 }
 
 export default Register;
+<<<<<<< HEAD
+=======
 
 
 
@@ -551,3 +553,4 @@ export default Register;
        
        
 
+>>>>>>> 068a94b563424ceda86406ec7c73a909fff643ac
