@@ -365,3 +365,192 @@ function Register() {
 }
 
 export default Register;
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useRef } from 'react'
+// import { useState } from 'react';
+// import { Country, State, City } from "country-state-city";
+// import { useNavigate } from 'react-router-dom';
+
+// import { register } from '../services/authService';
+
+
+
+// function Register() {
+//   const navigate=useNavigate()
+
+//   const [contries,setContries]=useState(Country.getAllCountries())
+//   const [states,setStates] =useState([])
+//   const [cities,setCities]=useState([])
+  
+//   const [selectedContry,setSelectedContry] =useState(null)
+//   const [selectedState,setSelectedState] =useState(null)
+//   const [selectedCity,setSelectedCity]=useState(null)
+//   const [errors,setErros]=useState({})
+//   //  console.log(contries);
+   
+//    const imageRef=useRef(null)
+//   const [profilePic,setProfilePic]=useState(null)
+
+//     const [formData, setFormData] = useState({
+        
+//         email: "",
+//         password: "",
+//         confirmPassword:"",
+//         companyName:"",
+//         nameOfManager:"",
+//         contactNO:"",
+//         registrationId:"",
+        
+//       });
+//       const handleChange = (e) => {
+//        const {name, value}= e.target.value
+//         setFormData({...formData,[e.target.name]: e.target.value})
+//         // if(name===email&& !formData.email.length<0){
+//         //   setErros((prevErrors)=>({
+//         //     ...prevErrors,
+//         //     email:""
+//         //   }))
+//         // }
+        
+//       };
+      
+
+//       const  handleContryChange =(country)=>{
+//         setSelectedContry(country)
+      
+//         setStates(State.getStatesOfCountry(country.isoCode))
+//        setCities([])
+//       }
+//       // console.log(states);
+
+//       const handleStatehange = (state)=>{
+//         setSelectedState(state)
+        
+//         if(selectedContry){
+//         setCities(City.getCitiesOfState(selectedContry.isoCode, state.isoCode))
+//         }
+
+//       }
+//       const handleCityhange= (city)=>{
+
+//         setSelectedCity(city.target.value)
+       
+        
+//       }
+    
+     
+
+//       const handleClick= (e)=>{
+//         imageRef.current.click()
+//       }
+    
+//       const handleImageChange =(e)=>{
+//         const file= e.target.files[0]
+//         if(file){
+//           const imageUrl = URL.createObjectURL(file);
+//           setProfilePic(imageUrl)
+
+//         }
+//       }
+      
+//       console.log(selectedContry);
+      
+//       console.log(selectedState)
+//       console.log(selectedCity);
+//       console.log(formData);
+      
+
+//       const validate = () => {
+//         let newErrors = {};
+    
+        
+        
+
+//         if(!formData.companyName){
+//           newErrors.companyName="*Company Name is required"
+//         }
+//         if(!formData.email){
+//           newErrors.email ="*Email is required"
+//         }else if( !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)){
+//           newErrors.email="Enter the valid Email"
+
+//         }
+    
+       
+//         if (!formData.password ) {
+//             newErrors.password = "Password is required";
+//         }else if(formData.password.length<8) {
+//           newErrors.password = "Password is must be  atleast 8 characters";
+//         }
+    
+       
+//         if (formData.password !== formData.confirmPassword) {
+//             newErrors.confirmPassword = "Passwords do not match";
+//         }
+    
+        
+//         if (!formData.contactNO) {
+//             newErrors.contactNO = "Contact Number is required";
+//         } else if(formData.contactNO && !/^\d{10}$/.test(formData.contactNO)){
+//           newErrors.contactNO = "Enter valid Contact Number";
+//         }
+//         if(!formData.registrationId){
+//           newErrors.registrationId="Registration Id is Required"
+//         }
+//         if(!formData.nameOfManager){
+//           newErrors.nameOfManager= "Manager Name is Required"
+//         }
+        
+//         if (!selectedContry) {
+//             newErrors.country = "*Required field";
+//         }
+//         if (!selectedState) {
+//             newErrors.state = "*Required field";
+//         }
+//         if (!selectedCity) {
+//             newErrors.city = "*Required field";
+//         }
+    
+//         setErros(newErrors);
+//         return Object.keys(newErrors).length === 0; 
+//       }
+      
+//       //   const countryname= selectedContry?.name || "Unknown";
+//       //    console.log(countryname);
+//       //  const stateName=selectedState?.name||"Unknown"
+//       //  console.log(stateName);
+//       //  console.log(selectedCity);
+
+       
+       
+
+>>>>>>> 068a94b563424ceda86406ec7c73a909fff643ac

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const register = async (req,res)=>{
 
-    const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,countryname,stateName,cityName} = req.body
+    const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,country,state,city} = req.body
      console.log(req.body)
 
     try {
@@ -25,9 +25,9 @@ const register = async (req,res)=>{
             contactNO,
             nameOfManager,
             registrationId,
-            countryname,
-            stateName,
-            cityName,
+            country,
+            state,
+            city,
             status:"Requested"
        })
        await newAgency.save()
@@ -46,7 +46,7 @@ const login = async (req,res)=>{
     const {email,password} = req.body;
     console.log(req.body,"from login");
     try {
-        const existingUser = await AgencySchema.findOne({email})
+        const existingUser = await Agency.findOne({email})
         if(!existingUser){
             return res.status(404).json("user not found")
         }
@@ -59,9 +59,16 @@ const login = async (req,res)=>{
         const token = jwt.sign({
             id:existingUser._id, email:existingUser.email
         },process.env.JWT_SECRET,{expiresIn:"30d"})
-        console.log(token,"from token")
+        console.log(token,"from token");
 
-        res.status(200).json({message:"Login successfull",user:existingUser,token})
+        res.cookie("token",token,{
+            httpOnly:true,
+            secure:process.env.NODE_ENV === "production",
+            sameSite:"strict",
+            maxAge:30*24*60*60*1000
+        })
+
+        res.status(200).json({message:"Login successfull",agency:existingUser,token})
 
     } catch (error) {
         
@@ -70,4 +77,19 @@ const login = async (req,res)=>{
     }
 }
 
-module.exports = {register,login}
+
+const agencyFetch = async (req,res)=>{
+   
+    try {
+        console.log(req.user,"from agency fetch request");
+        const agency = await Agency.findById(req.user.id).select("-password")
+        if(!agency){
+            return res.status(404).json({message: "agency not found"})
+        }
+        res.status(200).json(agency)
+    } catch (error) {
+        
+    }
+}
+
+module.exports = {register,login,agencyFetch}

@@ -305,12 +305,11 @@ import {
   FaBullhorn,
 } from "react-icons/fa";
 import { MdPostAdd } from "react-icons/md";
-
+import LogoNavbar from "./logo-navbar";
 
 const UserNavbar = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
 
@@ -318,9 +317,9 @@ const UserNavbar = () => {
     <>
       
       <div className="hidden md:flex flex-col w-64 text-slate-800 h-full ">
-        <div className="flex items-center justify-center h-20 border-b-2">
+        <div className="flex items-center justify-center h-20 border-b-2 flex-col ">
           
-          <h1 className="text-2xl font-bold">Tripeazy</h1>
+          <h1 className="text-2xl font-bold flex-col">Tripeazy</h1>
         </div>
         <nav className="flex-1 p-4 space-y-4 ">
           <NavLink
