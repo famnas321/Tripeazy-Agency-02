@@ -12,7 +12,7 @@ import Messages from './components/messages/messages'
 import Contact from './components/contacts/contact'
 import Addvertisment from './components/addvertisment/addvertisment'
 import Profiles from './components/profile/profiles'
-import PostBlog from './components/blogs/postBlog'
+import PostBlog from './components/blogs/PostBlog'
 
 
 

@@ -13,6 +13,7 @@ const Profiles = () => {
   const [loading, setLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [errors, setErrors] = useState({});
+  const [image,setImage] = useState(null)
   const [Profile, setProfile] = useState({
     companyName: "",
     email: "",
@@ -67,9 +68,9 @@ const Profiles = () => {
     if (!Profile.nameOfManager) tempErrors.nameOfManager = "name of manager is required";
     if (!Profile.country) tempErrors.country = "Country is required";
     if (!Profile.state) tempErrors.state = "State is required";
-    if (!Profile.phone) {
-      tempErrors.phone = "phone number is required";
-    } else if (Profile.phone.length !== 10) {
+    if (!Profile.contactNO) {
+      tempErrors.contactNO = "phone number is required";
+    } else if (Profile.contactNO.length !== 10) {
       tempErrors.phone = "Phone number must be exactly 10 digits";
     }
 
@@ -112,6 +113,9 @@ const Profiles = () => {
   //     navigate("/login")
   //   }
   // }
+
+  
+  // Handle Image Upload
   const handleImage = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -120,56 +124,33 @@ const Profiles = () => {
     formData.append("image", file);
     formData.append("type", "profile");
   
-    setLoading(true);
     try {
-      const response = await axios.post(
-        // `${API_BASE_URL}/api/upload`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true,
-        }
-      );
+      const response = await axiosInstance.post("/upload-profile-photo", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
   
       if (response.status === 200) {
-        const imageUrl = response.data.imageUrl;
-        dispatch(setUserInfo({ ...userinfo, image: imageUrl }));
-        setImage(imageUrl);
-        toast.success("Image uploaded successfully!");
+        setImage(response.data.imageUrl); // Update the UI with the new image URL
+        toast.success("Profile photo updated!");
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
       toast.error("Failed to upload image");
-    } finally {
-      setLoading(false);
     }
   };
-  //   const logOut = async ()=>{
- 
+  
+  // Handle Image Deletion
   const deleteImage = async () => {
-    setLoading(true);
     try {
-      const response = await axios.delete(
-        `${API_BASE_URL}/api/delete`,
-        {
-          withCredentials: true,
-          data: {
-            image: image, // Include the image URL
-            type: "profile", // Specify the type
-          },
-        }
-      );
+      const response = await axiosInstance.delete("/delete-profile-photo", {
+        data: { image },
+      });
   
       if (response.status === 200) {
-        dispatch(setUserInfo({ ...userinfo, image: null }));
         setImage(null);
-        toast.success("Image deleted successfully!");
+        toast.success("Profile photo deleted!");
       }
     } catch (error) {
-      console.error("Error deleting image:", error);
       toast.error("Failed to delete image");
-    } finally {
-      setLoading(false);
     }
   };
   
@@ -190,7 +171,7 @@ const Profiles = () => {
       <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-xl font-bold text-gray-700">
-            Welcome, {Profile.companyName} {Profile.lastName}
+            Welcome, {Profile.companyName} 
           </h2>
         </div>
       </div>
@@ -206,7 +187,7 @@ const Profiles = () => {
           >
             <Avatar className="h-24 w-24 md:w-32 md:h-32 rounded-full overflow-hidden">
 
-              {/* {image ? (
+              {image ? (
                 <AvatarImage
                   src={image}
                   alt="profile"
@@ -218,18 +199,18 @@ const Profiles = () => {
                     ? Profile.firstName.split("").shift()
                     : Profile.email.split("").shift()}
                 </div>
-              )} */}
+              )}
             </Avatar>
             {hovered && (
               <div
                 className="absolute inset-0 flex items-center justify-center bg-black/50 ring-fuchsia-50 rounded-full"
-                // onClick={image ? deleteImage : () => fileInputRef.current.click()}
+                onClick={image ? deleteImage : () => fileInputRef.current.click()}
               >
-                {/* {image ? (
+                {image ? (
                   <FaTrash className="text-white text-3xl cursor-pointer" />
                 ) : (
                   <FaPlus className="text-white text-3xl cursor-pointer" />
-                )} */}
+                )}
               </div>
             )}
             <input

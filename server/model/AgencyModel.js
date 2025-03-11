@@ -1,5 +1,4 @@
-const mongoose = require("mongoose")
-
+const mongoose = require("mongoose");
 
 const AgencySchema = new mongoose.Schema({
   companyName: {
@@ -14,7 +13,6 @@ const AgencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
   contactNO: {
     type: Number,
     required: true,
@@ -39,11 +37,14 @@ const AgencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  status:{
-    type:String,
-    required:true
-  }
-});
+  status: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,  // ✅ Stores the Cloudinary URL
+    default: "",   // Optional: Default empty string
+  },
+}, { timestamps: true });
 
-module.exports = mongoose.model("Agency",AgencySchema)
-
+module.exports = mongoose.model("Agency", AgencySchema);

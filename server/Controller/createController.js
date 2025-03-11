@@ -1,4 +1,5 @@
 const cloudinary = require("../config/cloudinary");
+const Agency = require("../model/AgencyModel");
 require("dotenv").config();
 const Blog = require("../model/Blog")
 
@@ -22,11 +23,11 @@ exports.uploadImage = async (req, res) => {
       if (req.body.type === "profile") {
        
         
-        const updatedUser = await Host.findByIdAndUpdate(
-          req.userId,
-          { image: imageUrl},
+        const updatedUser = await Agency.findByIdAndUpdate(
+          req.user.id,  
+          { $set: { image: imageUrl } },  // 🔥 Use `$set` to ensure only `image` field updates
           { new: true }
-        );
+      );
      
       }
   
