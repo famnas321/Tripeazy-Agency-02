@@ -13,7 +13,7 @@ const Profiles = () => {
   const [loading, setLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [errors, setErrors] = useState({});
-  const [image,setImage] = useState(null)
+  
   const [Profile, setProfile] = useState({
     companyName: "",
     email: "",
@@ -25,6 +25,7 @@ const Profiles = () => {
     city: "",
     image: "",
   });
+  const [image,setImage] = useState(null)
 
   useEffect(()=>{
     
@@ -33,6 +34,7 @@ const Profiles = () => {
       try {
         const response = await axiosInstance.get("/profile");
         setProfile(response.data)
+        setImage(response.data.image)
          console.log(response.data,"from backend agency details")
          console.log(Profile.image,"image url")
       } catch (error) {
@@ -145,7 +147,7 @@ const Profiles = () => {
   const deleteImage = async () => {
     try {
       const response = await axiosInstance.delete("/delete-profile-photo", {
-        data: { image },
+        data: { image,type:"profile" },
       });
   
       if (response.status === 200) {
@@ -209,7 +211,7 @@ const Profiles = () => {
                 className="absolute inset-0 flex items-center justify-center bg-black/50 ring-fuchsia-50 rounded-full"
                 onClick={image ? deleteImage : () => fileInputRef.current.click()}
               >
-                {image ? (
+                {Profile.image ? (
                   <FaTrash className="text-white text-3xl cursor-pointer" />
                 ) : (
                   <FaPlus className="text-white text-3xl cursor-pointer" />

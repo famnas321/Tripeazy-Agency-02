@@ -12,8 +12,8 @@ exports.uploadImage = async (req, res) => {
   
       const folderMap = {
         profile: "profile-images",
-        event: "event-images",
-        housing: "housing-images",
+        blog: "blogs",
+        package: "packages",
       };
   
       const folder = folderMap[req.body.type] || "default-images";
@@ -45,20 +45,20 @@ exports.uploadImage = async (req, res) => {
   exports.deleteImage = async (req, res) => {
     try {
       const { image, type } = req.body;
-      
+      console.log(req.body,"req.body of delete image")
       if (!image || !type) return res.status(400).json({ message: "No image or type provided" });
   
       const models = { profile: Host, event: Events, housing: Housing };
       const model = models[type];
       if (!model) return res.status(400).json({ message: "Invalid type" });
   
-      const record = await model.findById(req.userId);
+      const record = await model.findById(req.user.id);
       const publicId = image.split("/").pop().split(".")[0];
       const folder = `${type}-images`;
   
       if (record?.image === image) {
         await cloudinary.uploader.destroy(`${folder}/${publicId}`);
-        await model.findByIdAndUpdate(req.userId, { image: null }, { new: true });
+        await model.findByIdAndUpdate(req.user.id, { image: null }, { new: true });
         return res.status(200).json({ message: "Image deleted from both database and Cloudinary" });
       }
   

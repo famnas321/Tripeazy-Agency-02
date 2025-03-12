@@ -13,6 +13,7 @@ import Contact from './components/contacts/contact'
 import Addvertisment from './components/addvertisment/addvertisment'
 import Profiles from './components/profile/profiles'
 import PostBlog from './components/blogs/PostBlog'
+import Addpackage from './components/posts/Addpackage'
 
 
 
@@ -36,6 +37,7 @@ function App() {
           <Route path='advertisments' element={<Addvertisment/>}/>
           <Route path='profile' element={<Profiles/>}/>
           <Route path="/agency/post-blog" element={<PostBlog />} />
+          <Route path="/addPackage" element={<Addpackage/>}/>
 
 
         </Route>
