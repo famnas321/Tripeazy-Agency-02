@@ -48,7 +48,7 @@ exports.uploadImage = async (req, res) => {
       console.log(req.body,"req.body of delete image")
       if (!image || !type) return res.status(400).json({ message: "No image or type provided" });
   
-      const models = { profile: Host, event: Events, housing: Housing };
+      const models = { profile: Agency,  };
       const model = models[type];
       if (!model) return res.status(400).json({ message: "Invalid type" });
   

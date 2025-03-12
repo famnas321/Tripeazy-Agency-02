@@ -38,8 +38,7 @@ function App() {
           <Route path='profile' element={<Profiles/>}/>
           <Route path="/agency/post-blog" element={<PostBlog />} />
           <Route path="/addPackage" element={<Addpackage/>}/>
-
-
+          
         </Route>
         
 

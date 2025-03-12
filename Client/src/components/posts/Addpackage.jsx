@@ -66,7 +66,7 @@ function Addpackage() {
      
     <div className=' mt-5 w-full h-scheen'>
       <div>
-        <h1 className='font-bold text-3xl'> Add  Your Own Detailes</h1>
+        <h1 className='font-bold text-3xl'> Add  Your Package Detailes</h1>
         <h1 className=' mt-5 font-semibold text-1xl'> Description</h1>
 
         
