@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from "react-icons/fa";
 
-function blogs() {
+function Blogs() {
   const [blogs, setBlogs] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [likedBlogs, setLikedBlogs] = useState({});
+  const [savedBlogs, setSavedBlogs] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBlogs();
@@ -17,7 +22,8 @@ function blogs() {
     setLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/agency/auth/fetch-blogs`, {
-        params: { category: selectedCategory, search },withCredentials: true
+        params: { category: selectedCategory, search },
+        withCredentials: true,
       });
 
       const blogsData = Array.isArray(response.data) ? response.data : [];
@@ -35,6 +41,14 @@ function blogs() {
     if (!Array.isArray(blogs)) return;
     const uniqueCategories = [...new Set(blogs.map((blog) => blog.category || "Uncategorized"))];
     setCategories(uniqueCategories);
+  };
+
+  const toggleLike = (id) => {
+    setLikedBlogs((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const toggleSave = (id) => {
+    setSavedBlogs((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -72,16 +86,45 @@ function blogs() {
       {loading ? (
         <p className="text-gray-500 text-center">Loading blogs...</p>
       ) : blogs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {blogs.map((blog, index) => (
-            <div key={blog._id || index} className="border p-4 rounded shadow-lg">
-              <img src={blog.thumbnail} alt={blog.title} className="w-full h-40 object-cover rounded" />
-              <h3 className="text-lg font-semibold mt-2">{blog.title}</h3>
-              <p className="text-gray-600 text-sm">Location: {blog.location}</p>
-              <p className="text-gray-600 text-sm">Likes: {blog.likes}</p>
-              <Link to={`/blogs/${blog._id}`} className="text-blue-500 mt-2 block">
-                Read More
-              </Link>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs.map((blog) => (
+            <div
+              key={blog._id}
+              className="relative bg-white border rounded-lg shadow-lg cursor-pointer overflow-hidden transform transition-transform duration-300 hover:scale-105"
+              onClick={() => navigate(`/blogs/${blog._id}`)}
+            >
+              {/* Blog Image */}
+              <img src={blog.thumbnail} alt={blog.title} className="w-full h-48 object-cover" />
+
+              {/* Blog Content */}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold truncate">{blog.title}</h3>
+                <p className="text-gray-500 text-sm mt-1">{blog.description || "No description available."}</p>
+                <p className="text-gray-600 text-sm">📍 {blog.location}</p>
+                <p className="text-gray-600 text-sm">❤️ {blog.likes}</p>
+              </div>
+
+              {/* Like & Save Icons */}
+              <div className="absolute top-2 right-2 flex gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleLike(blog._id);
+                  }}
+                  className="text-red-500 text-xl"
+                >
+                  {likedBlogs[blog._id] ? <FaHeart /> : <FaRegHeart />}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleSave(blog._id);
+                  }}
+                  className="text-blue-600 text-xl"
+                >
+                  {savedBlogs[blog._id] ? <FaBookmark /> : <FaRegBookmark />}
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -92,4 +135,4 @@ function blogs() {
   );
 }
 
-export default blogs;
+export default Blogs;

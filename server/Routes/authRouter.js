@@ -12,4 +12,5 @@ router.get("/profile",authMiddleware,agencyFetch)
 router.post("/upload-profile-photo",authMiddleware,upload.single('image'),uploadImage)
 router.post("/logout",logout)
 
+
 module.exports = router

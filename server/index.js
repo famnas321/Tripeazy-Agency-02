@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const authRouter = require("./Routes/authRouter.js"); // ✅ use require()
+const blogRouter = require("./Routes/blog.router.js")
 const cookieParser = require("cookie-parser")
 const userRoutes = require("./Routes/create.router.js")
+
 const app = express();
 dotenv.config();
 
@@ -17,6 +19,7 @@ app.use(cors({
 
 app.use("/api",authRouter);
 app.use("/api/agency/auth",userRoutes);
+app.use("/api/blogs",blogRouter)
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log(`MongoDB connected successfully...😎`))
