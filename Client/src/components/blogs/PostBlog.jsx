@@ -67,7 +67,7 @@ const PostBlog = () => {
     }
   };
 
-  const handleDeleteImage = async (imageUrl, type = "blog") => {
+  const handleDeleteImage = async (imageUrl, type) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/delete`, {
         withCredentials: true,

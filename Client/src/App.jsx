@@ -7,12 +7,14 @@ import Home from "./components/Home/Home"
 import Clients from './components/clients/clients'
 import NavbarLayout from "./components/navbar/navbar-layout"
 import Post from './components/posts/post'
-import Blog from './components/blogs/blog'
+import Blog from './components/blogs/blogCard'
 import Messages from './components/messages/messages'
 import Contact from './components/contacts/contact'
 import Addvertisment from './components/addvertisment/addvertisment'
 import Profiles from './components/profile/profiles'
 import PostBlog from './components/blogs/PostBlog'
+import Addpackage from './components/posts/Addpackage'
+import Blogshow from './components/blogs/blogShow'
 
 
 
@@ -36,7 +38,8 @@ function App() {
           <Route path='advertisments' element={<Addvertisment/>}/>
           <Route path='profile' element={<Profiles/>}/>
           <Route path="/agency/post-blog" element={<PostBlog />} />
-
+          <Route path="/addPackage" element={<Addpackage/>}/>
+          <Route path="/blogs/:id" element={<Blogshow/>}/>
 
         </Route>
         

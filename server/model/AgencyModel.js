@@ -43,7 +43,7 @@ const AgencySchema = new mongoose.Schema({
   },
   image: {
     type: String,  // ✅ Stores the Cloudinary URL
-    default: "",   // Optional: Default empty string
+    default: null,   // Optional: Default empty string
   },
 }, { timestamps: true });
 
