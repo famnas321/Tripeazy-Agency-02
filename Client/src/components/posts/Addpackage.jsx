@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Country, State, City } from "country-state-city";
 
+import PackageImage from './PackageImage';
+
 function Addpackage() {
   const [country,setCountry]= useState(Country.getAllCountries())
   const [state,setState]=useState([])
@@ -18,13 +20,11 @@ function Addpackage() {
     packageDescription: ""
   });
   
-  
-
   const [selectedCountry,setSelectedCountry]= useState(Country.getAllCountries())
   const [selectedState,setSelectedState]=useState([])
   const [selectedCity,setselectedCity]=useState([])  
-
-  
+  const [images,setImages]=useState({})
+  const key=["imageOne",]
  const handleChange = (e)=>{
    const {name,value}=e.target
       setFields({...fields, [name]:value})
@@ -40,8 +40,6 @@ function Addpackage() {
   const handleCityChange = (city)=>{
        setselectedCity(city)
   }
- 
-
  const handleSubmit =()=>{
   console.log("submitted")
   const updatedFields = {
@@ -54,22 +52,18 @@ function Addpackage() {
   console.log(updatedFields)
  }
  
- 
-    
- 
+ console.log(images, "this is images from parent")   
+
 
   return (
 <>
-    <nav className='w-full h-16 bg-slate-500'>
+   <nav className='w-full h-16 bg-slate-500'>
       <hr className='w-1/2'/>
     </nav>
-     
-    <div className=' mt-5 w-full h-scheen'>
+     <div className=' mt-5 w-full h-scheen'>
       <div>
         <h1 className='font-bold text-3xl'> Add  Your Package Detailes</h1>
         <h1 className=' mt-5 font-semibold text-1xl'> Description</h1>
-
-        
         <div className=" space-y-3 w-full">
   <textarea
   placeholder='why the users should choose you.....'
@@ -80,11 +74,9 @@ function Addpackage() {
     onChange={handleChange}
   />
 </div>
-
 <div className="flex flex-col items-start p-4">
   <form action="submit" 
- 
-  className="w-full flex flex-wrap md:flex-nowrap items-start gap-4">
+ className="w-full flex flex-wrap md:flex-nowrap items-start gap-4">
   
     <div className="flex flex-col w-full sm:w-full md:w-1/2">
       <label htmlFor="destination1" className="text-gray-700 font-medium">
@@ -99,22 +91,18 @@ function Addpackage() {
         placeholder="Destination here"
         onChange={handleChange}
       />
-
 <label htmlFor="destination2" className= " mt-2 text-gray-700 font-medium">
         Select Country
       </label>
       <select 
   id="destination Catogory"
- 
-  className="w-full border border-gray-300 p-2 rounded"
+ className="w-full border border-gray-300 p-2 rounded"
   onChange={(e)=>handleContryChange(country.find((c)=>c.isoCode === e.target.value))}
 >
   {country.map((country)=>(
       <option value={country.isoCode} key={country.isoCode}>{country.name}</option>
   ))}
-  
-  
-</select>
+  </select>
 
 <label htmlFor="destination2" className= " mt-2 text-gray-700 font-medium">
         Select City
@@ -130,9 +118,7 @@ function Addpackage() {
 </select>
 
 <div className="flex flex-row items-center gap-4 w-full">
-    
-   
-    <div className="flex flex-col w-1/2">
+     <div className="flex flex-col w-1/2">
       <label htmlFor="adult" className="text-gray-700 font-medium">
         Adult
       </label>
@@ -147,8 +133,7 @@ function Addpackage() {
       />
     </div>
 
-    
-    <div className="flex flex-col w-1/2">
+     <div className="flex flex-col w-1/2">
       <label htmlFor="minor" className="text-gray-700 font-medium">
         Minor
       </label>
@@ -165,9 +150,7 @@ function Addpackage() {
 
   </div>
     </div>
-
-   
-    <div className="flex flex-col w-full sm:w-full md:w-1/2">
+     <div className="flex flex-col w-full sm:w-full md:w-1/2">
       <label htmlFor="destination2" className="text-gray-700 font-medium">
         Destination Catogory
       </label>
@@ -247,8 +230,7 @@ function Addpackage() {
         <option value={c.isoCode} key={c.isoCode}>{c.currency}</option>
       ))} 
     </select>
-
-    <input 
+      <input 
       type="text" 
       id="phone"
       name='payment'
@@ -259,12 +241,10 @@ function Addpackage() {
     />
   </div>
   
-    </div>
-
-    
+    </div>   
   </form>
   <label htmlFor="" className= " mt-2 text-gray-700 font-medium">
-        Package Over view 
+       Package Over view
       </label>
 
   <textarea
@@ -275,7 +255,7 @@ function Addpackage() {
     className=" w-full h-32  py-2.5 sm:py-3 px-4 block  border border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" 
     onChange={handleChange}
   />
-
+ <PackageImage onChange={(file,key)=>setImages((prev)=>({...prev ,[key]:file}))}/>
 <button 
   type="submit"
   className="mt-3 bg-blue-700 backdrop-blur-lg text-white font-medium py-2 px-6 rounded-lg border border-white/30 shadow-md hover:bg-purple-700 transition 
@@ -284,19 +264,7 @@ function Addpackage() {
 >
   Submit
 </button>
-
-
-
 </div>
-
-
-
-
-
-  
-
-       
-
         </div>    
     </div>
     </>
@@ -304,3 +272,6 @@ function Addpackage() {
 }
 
 export default Addpackage
+
+
+
