@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from "react-icons/fa";
@@ -15,27 +15,27 @@ function Blogs() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchBlogs = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/agency/auth/fetch-blogs`,
+          { params: { category: selectedCategory, search }, withCredentials: true }
+        );
+
+        const blogsData = Array.isArray(response.data) ? response.data : [];
+        setBlogs(blogsData);
+        extractCategories(blogsData);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setBlogs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchBlogs();
   }, [selectedCategory, search]);
-
-  const fetchBlogs = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/agency/auth/fetch-blogs`, {
-        params: { category: selectedCategory, search },
-        withCredentials: true,
-      });
-
-      const blogsData = Array.isArray(response.data) ? response.data : [];
-      setBlogs(blogsData);
-      extractCategories(blogsData);
-    } catch (error) {
-      console.error("Error fetching blogs:", error);
-      setBlogs([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const extractCategories = (blogs) => {
     if (!Array.isArray(blogs)) return;
@@ -43,13 +43,13 @@ function Blogs() {
     setCategories(uniqueCategories);
   };
 
-  const toggleLike = (id) => {
+  const toggleLike = useCallback((id) => {
     setLikedBlogs((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  }, []);
 
-  const toggleSave = (id) => {
+  const toggleSave = useCallback((id) => {
     setSavedBlogs((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
@@ -60,7 +60,6 @@ function Blogs() {
         </Link>
       </div>
 
-      {/* Filters */}
       <div className="flex gap-4 mb-4">
         <select
           className="p-2 border rounded"
@@ -69,7 +68,9 @@ function Blogs() {
         >
           <option value="">All Categories</option>
           {categories.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
+            <option key={index} value={category}>
+              {category}
+            </option>
           ))}
         </select>
 
@@ -82,7 +83,6 @@ function Blogs() {
         />
       </div>
 
-      {/* Blog List */}
       {loading ? (
         <p className="text-gray-500 text-center">Loading blogs...</p>
       ) : blogs.length > 0 ? (
@@ -93,19 +93,19 @@ function Blogs() {
               className="relative bg-white border rounded-lg shadow-lg cursor-pointer overflow-hidden transform transition-transform duration-300 hover:scale-105"
               onClick={() => navigate(`/blogs/${blog._id}`)}
             >
-              {/* Blog Image */}
               <img src={blog.thumbnail} alt={blog.title} className="w-full h-48 object-cover" />
 
-              {/* Blog Content */}
               <div className="p-4">
                 <h3 className="text-lg font-semibold truncate">{blog.title}</h3>
-                <p className="text-gray-500 text-sm mt-1">{blog.description || "No description available."}</p>
+                <p className="text-gray-500 text-sm mt-1">
+                  {blog.description || blog.content?.[0]?.blocks?.[0]?.data?.text || "No description available."}
+                </p>
                 <p className="text-gray-600 text-sm">📍 {blog.location}</p>
                 <p className="text-gray-600 text-sm">❤️ {blog.likes}</p>
               </div>
 
-              {/* Like & Save Icons */}
-              <div className="absolute top-2 right-2 flex gap-2">
+              {/* Like & Save Buttons in Top Right */}
+              <div className="absolute top-2 right-2 flex flex-col gap-2 items-center bg-white bg-opacity-75 p-2 rounded-lg shadow-md">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

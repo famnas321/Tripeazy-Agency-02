@@ -1,6 +1,7 @@
 const Agency = require("../model/AgencyModel")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const Contact = require("../model/contact")
 const register = async (req,res)=>{
 
     const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,country,state,city} = req.body
@@ -107,5 +108,27 @@ const agencyFetch = async (req,res)=>{
     }
 }
 
+const contactUs = async (req,res)=>{
+    try {
+        const {name,email,phone,message} = req.body;
+        const userId = req.user?.id;
+       
+        const newMessage = new Contact({
+            userId,
+            name,
+            email,
+            phone,
+            message,
+        });
 
-module.exports = {register,login,agencyFetch,logout}
+        await newMessage.save();
+        res.status(201).json({success: true, message: "Contact request sent successfully."})
+    } catch (error) {
+        console.error("Error saving contact request:", error);
+        res.status(500).json({ success: false, message: "Failed to send contact request." });
+        
+    }
+}
+
+
+module.exports = {register,login,agencyFetch,contactUs,logout}
