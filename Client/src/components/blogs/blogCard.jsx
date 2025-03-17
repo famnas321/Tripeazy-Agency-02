@@ -55,7 +55,7 @@ function Blogs() {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Explore Blogs</h2>
-        <Link to="/agency/post-blog" className="bg-blue-600 text-white px-4 py-2 rounded">
+        <Link to="/blogs/post-blog" className="bg-blue-600 text-white px-4 py-2 rounded">
           + Post New Blog
         </Link>
       </div>
