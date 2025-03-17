@@ -12,12 +12,12 @@ import { X } from "lucide-react";
 const PostBlog = () => {
   const editorInstance = useRef(null);
   const [title, setTitle] = useState("");
-  const [thumbnail, setThumbnail] = useState(null); // Store image file
-  const [thumbnailPreview, setThumbnailPreview] = useState(""); // Store preview URL
+  const [thumbnailFile, setThumbnailFile] = useState(null); // Store thumbnail file locally
   const [isSaving, setIsSaving] = useState(false);
   const [category, setCategory] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [location, setLocation] = useState("");
+  const [blogImages, setBlogImages] = useState([]); // Store blog content images locally
   const navigate = useNavigate();
 
   const handleClose = () => navigate("/blogs");
@@ -29,53 +29,58 @@ const PostBlog = () => {
     }
   };
 
-  // Handle image selection
-  const handleImageSelect = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setThumbnail(file); // Store file in state
-      setThumbnailPreview(URL.createObjectURL(file)); // Create preview URL
+  // Upload all images to Cloudinary
+  const uploadImagesToCloudinary = async (files) => {
+    const uploadedImages = [];
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("type", "blog");
+      try {
+        const { data } = await axios.post(
+          `${API_BASE_URL}/api/agency/auth/blog-upload`,
+          formData,
+          { withCredentials: true }
+        );
+        uploadedImages.push(data.imageUrl); // Store Cloudinary URLs
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        toast.error("Error uploading image. Please try again.");
+        return null;
+      }
     }
+    return uploadedImages;
   };
 
-  // Remove selected image
-  const handleDeleteImage = () => {
-    setThumbnail(null);
-    setThumbnailPreview("");
-  };
-
-  // Upload image & save blog when published
+  // Handle blog publishing
   const handleSaveBlog = async () => {
-    if (!title || !thumbnail) {
+    if (!title || !thumbnailFile) {
       toast.error("Please add a title and thumbnail before saving.");
       return;
     }
 
     setIsSaving(true);
+
     try {
-      // Upload image to Cloudinary
-      const formData = new FormData();
-      formData.append("image", thumbnail);
-      formData.append("type", "thumbnail");
-      
-      const uploadResponse = await axios.post(
-        `${API_BASE_URL}/api/agency/auth/blog-upload`,
-        formData,
-        { withCredentials: true }
-      );
+      // Upload thumbnail and blog images to Cloudinary
+      const thumbnailUrl = (await uploadImagesToCloudinary([thumbnailFile]))[0];
+      const blogImageUrls = await uploadImagesToCloudinary(blogImages);
 
-      const uploadedImageUrl = uploadResponse.data.imageUrl; // Get uploaded image URL
+      if (!thumbnailUrl || !blogImageUrls) {
+        toast.error("Failed to upload images. Please try again.");
+        return;
+      }
 
+      // Save blog content with updated image URLs
       const content = await editorInstance.current?.save();
-      const blogData = { 
-        title, 
-        content, 
-        thumbnail: uploadedImageUrl, 
-        category, 
-        location 
+      const blogData = {
+        title,
+        content,
+        thumbnail: thumbnailUrl,
+        category,
+        location,
       };
 
-      // Save blog to DB
       const response = await axios.post(
         `${API_BASE_URL}/api/agency/auth/blog`,
         blogData,
@@ -85,11 +90,11 @@ const PostBlog = () => {
       if (response.status === 201) {
         toast.success("Blog posted successfully");
         setTitle("");
-        setThumbnail(null);
-        setThumbnailPreview("");
+        setThumbnailFile(null);
         setCategory("");
         setInputValue("");
         setLocation("");
+        setBlogImages([]);
         editorInstance.current?.clear();
       } else {
         toast.error("Unexpected response from the server. Please try again.");
@@ -101,6 +106,20 @@ const PostBlog = () => {
     }
   };
 
+  // Handle thumbnail file selection
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setThumbnailFile(file);
+    }
+  };
+
+  // Handle blog content image selection
+  const handleBlogImageUpload = async (file) => {
+    setBlogImages((prev) => [...prev, file]);
+    return { success: 1, file: { url: URL.createObjectURL(file) } }; // Return a local URL for preview
+  };
+
   useEffect(() => {
     if (!editorInstance.current) {
       editorInstance.current = new EditorJS({
@@ -108,7 +127,12 @@ const PostBlog = () => {
         placeholder: "Write your blog content here...",
         tools: {
           list: List,
-          image: ImageTool,
+          image: {
+            class: ImageTool,
+            config: {
+              uploader: { uploadByFile: handleBlogImageUpload },
+            },
+          },
         },
       });
     }
@@ -135,59 +159,65 @@ const PostBlog = () => {
         />
 
         <div className="border p-4 rounded">
-          <input 
-            type="file" 
-            accept="image/*" 
-            onChange={handleImageSelect} 
-            className="w-full p-2 border rounded" 
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleThumbnailChange}
+            className="w-full p-2 border rounded"
           />
-          {thumbnailPreview && (
+          {thumbnailFile && (
             <div className="relative">
-              <img src={thumbnailPreview} alt="Thumbnail Preview" className="w-full h-48 object-cover mt-2 rounded" />
-              <button 
-                onClick={handleDeleteImage} 
-                className="absolute top-2 right-2 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center">
+              <img
+                src={URL.createObjectURL(thumbnailFile)}
+                alt="Thumbnail Preview"
+                className="w-full h-48 object-cover mt-2 rounded"
+              />
+              <button
+                onClick={() => setThumbnailFile(null)}
+                className="absolute top-2 right-2 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center"
+              >
                 X
               </button>
             </div>
           )}
         </div>
 
-        <input 
-          type="text" 
-          value={location} 
-          onChange={(e) => setLocation(e.target.value)} 
-          placeholder="Enter location (optional)" 
-          className="w-full p-2 border rounded" 
-        />
+        <div className="border p-4 rounded">
+          <input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Enter location (optional)"
+            className="w-full p-2 border rounded"
+          />
+        </div>
 
         <div id="editorjs" className="p-4 pb-0 border rounded"></div>
 
-        <div className="flex items-center space-x-2">
-          <input 
-            type="text" 
-            value={inputValue} 
-            onChange={(e) => setInputValue(e.target.value)} 
-            placeholder="Add a category" 
-            className="p-2 border rounded flex-1" 
-          />
-          <Button onClick={handleAddCategory} className="p-2 text-white rounded">Add</Button>
-        </div>
-        
-        {category && (
-          <div className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1">
-            <span>{category}</span>
-            <button onClick={() => setCategory("")} className="ml-2 text-gray-600 hover:text-gray-900">
-              <X className="w-4 h-4" />
-            </button>
+        <div className="space-y-2">
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Add a category"
+              className="p-2 border rounded flex-1"
+            />
+            <Button onClick={handleAddCategory} className="p-2 text-white rounded">
+              Add
+            </Button>
           </div>
-        )}
+          {category && (
+            <div className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1">
+              <span>{category}</span>
+              <button onClick={() => setCategory("")} className="ml-2 text-gray-600 hover:text-gray-900">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
 
-        <Button 
-          onClick={handleSaveBlog} 
-          disabled={isSaving} 
-          className="mt-4 p-2 text-white rounded"
-        >
+        <Button onClick={handleSaveBlog} disabled={isSaving} className="mt-4 p-2 text-white rounded">
           {isSaving ? "Saving..." : "Publish Blog"}
         </Button>
       </div>
