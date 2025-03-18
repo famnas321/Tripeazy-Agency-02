@@ -10,6 +10,7 @@ const Blog = require("../model/Blog")
 
 exports.uploadImage = async (req, res) => {
   try {
+
       if (!req.file) {
           return res.status(400).json({ message: "No file uploaded" });
       }
@@ -47,41 +48,6 @@ exports.uploadImage = async (req, res) => {
       res.status(500).json({ message: "Server error" });
   }
 };
-
-
-// exports.uploadImage = async (req, res) => {
-//     try {
-//       if (!req.file) {
-//         return res.status(400).json({ message: "No file uploaded" });
-//       }
-  
-//       const folderMap = {
-//         profile: "profile-images",
-//         blog: "blogs",
-//         package: "packages",
-//       };
-  
-//       const folder = folderMap[req.body.type] || "default-images";
-  
-//       const { secure_url: imageUrl, public_id } = await cloudinary.uploader.upload(req.file.path, { folder });
-  
-//       if (req.body.type === "profile") {
-       
-        
-//         const updatedUser = await Agency.findByIdAndUpdate(
-//           req.user.id,  
-//           { $set: { image: imageUrl } },  // 🔥 Use `$set` to ensure only `image` field updates
-//           { new: true }
-//       );
-     
-//       }
-  
-//       res.status(200).json({ imageUrl, public_id, type: req.body.type });
-//     } catch (error) {
-//       console.error("Error uploading image:", error);
-//       res.status(500).json({ message: "Server error" });
-//     }
-//   };
 
 
 

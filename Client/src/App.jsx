@@ -38,7 +38,7 @@ function App() {
           <Route path='contact-us' element={<Contact/>}/>
           <Route path='advertisments' element={<Addvertisment/>}/>
           <Route path='profile' element={<Profiles/>}/>
-          <Route path="/agency/post-blog" element={<PostBlog />} />
+          <Route path="/blogs/post-blog" element={<PostBlog />} />
           <Route path="/addPackage" element={<Addpackage/>}/>
           <Route path="/posts/package/organized" element={<OrganizedPackages/>}/>
           <Route path="/posts/package/guides" element={<PackageGuides/>}/>
