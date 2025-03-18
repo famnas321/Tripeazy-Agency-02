@@ -6,7 +6,7 @@ const authRouter = require("./Routes/authRouter.js"); // ✅ use require()
 const blogRouter = require("./Routes/blog.router.js")
 const cookieParser = require("cookie-parser")
 const userRoutes = require("./Routes/create.router.js")
-
+const packageRouter =require("./Routes/packageRoutes")
 const app = express();
 dotenv.config();
 
@@ -20,6 +20,7 @@ app.use(cors({
 app.use("/api",authRouter);
 app.use("/api/agency/auth",userRoutes);
 app.use("/api/blogs",blogRouter)
+app.use("/api/packages",packageRouter)
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log(`MongoDB connected successfully...😎`))

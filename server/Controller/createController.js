@@ -4,9 +4,13 @@ require("dotenv").config();
 const Blog = require("../model/Blog")
 
 
+
+
+
+
 exports.uploadImage = async (req, res) => {
   try {
-    console.log("image uploader is worked")
+
       if (!req.file) {
           return res.status(400).json({ message: "No file uploaded" });
       }
@@ -44,6 +48,7 @@ exports.uploadImage = async (req, res) => {
       res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 

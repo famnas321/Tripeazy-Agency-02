@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom";
 
 const tabs = [
   { name: "Packages", path: "/posts" },
-  { name: "Organized", path: "" },
-  { name: "Guides", path: "/expert-guides" },
+  { name: "Organized", path:"/posts/package/organized" },
+  { name: "Guides", path: "/posts/package/guides"},
 ];
 
 const Navigation = () => {
@@ -18,7 +18,7 @@ const Navigation = () => {
             to={tab.path}
             className={({ isActive }) =>
               `text-gray-800 transition-colors ${
-                isActive ? "text-blue-500 font-semibold" : "hover:text-blue-500 hover:font-semibold"
+                isActive ? "text-blue-600 font-bold " : "hover:text-blue-500 hover:font-semibold"
               }`
             }
           >

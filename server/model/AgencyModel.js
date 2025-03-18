@@ -25,15 +25,15 @@ const AgencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  country: {
+  countryname: {
     type: String,
     required: true,
   },
-  state: {
+  stateName: {
     type: String,
     required: true,
   },
-  city: {
+  cityName: {
     type: String,
     required: true,
   },
