@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Country, State, City } from "country-state-city";
 
 import PackageImage from './PackageImage';
+import { addPackages } from 'src/services/authService';
 
 function Addpackage() {
   const [country,setCountry]= useState(Country.getAllCountries())
@@ -24,7 +25,8 @@ function Addpackage() {
   const [selectedState,setSelectedState]=useState([])
   const [selectedCity,setselectedCity]=useState([])  
   const [images,setImages]=useState({})
-  const key=["imageOne",]
+  const [imageArray,setImageArray]=useState([])
+  
  const handleChange = (e)=>{
    const {name,value}=e.target
       setFields({...fields, [name]:value})
@@ -40,19 +42,53 @@ function Addpackage() {
   const handleCityChange = (city)=>{
        setselectedCity(city)
   }
- const handleSubmit =()=>{
+  
+  useEffect(() => {
+    
+    if (images && Object.keys(images).length > 0) {
+      setImageArray(Object.values(images));
+    }
+  }, [images]);
+  
+//  console.log(imageArray,"image Array is ")
+   
+ const handleSubmit = async ()=>{
+  if (imageArray.length === 0) {
+    console.error("No images selected.");
+    
+  }
+  const formData = new FormData()
+  console.log("FormData before appending:");
+  imageArray.forEach((file) => {
+    formData.append("image",file)
+   });
+  formData.append("type","package")
+  
+  
+  for (const pair of formData.entries()) {
+    console.log(pair[0], pair[1],"this is form data");
+  }
+
+
   console.log("submitted")
   const updatedFields = {
     ...fields,
     country:selectedCountry?.name || "Unknown",
     state: selectedState ?.name || "Unknown",
     city: city ?.name || "Unknown",
+
     
   }
-  console.log(updatedFields)
+  
+   try{
+    const response = await addPackages(formData,updatedFields)
+   }catch(error){
+      console.error(error, "error occured while recieving")
+   }
+   
  }
- 
- console.log(images, "this is images from parent")   
+  // console.log(images , "this is from the parent")
+   
 
 
   return (

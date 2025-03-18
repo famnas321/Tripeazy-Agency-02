@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const register = async (req,res)=>{
 
-    const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,country,state,city} = req.body
+    const {companyName,email,password,confirmPassword,contactNO,nameOfManager,registrationId,countryname,stateName,cityName} = req.body
      console.log(req.body)
 
     try {
@@ -25,9 +25,9 @@ const register = async (req,res)=>{
             contactNO,
             nameOfManager,
             registrationId,
-            country,
-            state,
-            city,
+            countryname,
+            stateName,
+            cityName,
             status:"Requested"
        })
        await newAgency.save()

@@ -15,8 +15,9 @@ import Profiles from './components/profile/profiles'
 import PostBlog from './components/blogs/PostBlog'
 import Addpackage from './components/posts/Addpackage'
 import Blogshow from './components/blogs/blogShow'
-
-
+import PackageGuides from './components/posts/PackageGuides'
+import OrganizedPackages from './components/posts/OrganizedPackages'
+import AddOrganizedPackage from './components/posts/AddOrganizedPackage'
 
 
 function App() {
@@ -39,6 +40,9 @@ function App() {
           <Route path='profile' element={<Profiles/>}/>
           <Route path="/agency/post-blog" element={<PostBlog />} />
           <Route path="/addPackage" element={<Addpackage/>}/>
+          <Route path="/posts/package/organized" element={<OrganizedPackages/>}/>
+          <Route path="/posts/package/guides" element={<PackageGuides/>}/>
+          <Route path="/posts/package/addOrganizedPackage" element={<AddOrganizedPackage/>}/>
           <Route path="/blogs/:id" element={<Blogshow/>}/>
 
         </Route>

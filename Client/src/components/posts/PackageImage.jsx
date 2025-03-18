@@ -28,12 +28,12 @@ function PackageImage({onChange}) {
       setImages((prev)=>({
         ...prev ,[key]:imageUrl
       }))       
-    
+      // console.log(file)
       onChange(file,key)
       //  onChange= setProp((prev)=>({...prev, [key]:file}))
      }
-     console.log(images)
-     console.log(images.imageOne,"this ") 
+      
+    //  console.log(images.imageOne,"this ") 
     //  console.log(prop,"this is original file")
   return (
     <>
