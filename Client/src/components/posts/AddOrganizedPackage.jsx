@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Country, State, City } from "country-state-city";
 
 import PackageImage from './PackageImage';
+import { addOrganizedPackage } from 'src/services/authService';
 function AddOrganizedPackage() {
  const [country,setCountry]= useState(Country.getAllCountries())
 //    const [state,setState]=useState([])
 //    const [city,setCity]=useState([])
    const [fields, setFields] = useState({
-     companyDescription: "",
+    
      destination: "",
      startingDestination:"",
      destinationCategory: "",
@@ -66,12 +67,12 @@ function AddOrganizedPackage() {
    imageArray.forEach((file) => {
      formData.append("image",file)
     });
-   formData.append("type","package")
+   formData.append("type","Organized Package")
    
    
-   for (const pair of formData.entries()) {
-     console.log(pair[0], pair[1],"this is form data");
-   }
+  //  for (const pair of formData.entries()) {
+  //    console.log(pair[0], pair[1],"this is form data");
+  //  }
  
  
    console.log("submitted")
@@ -81,7 +82,7 @@ function AddOrganizedPackage() {
    }
    
     try{
-     const response = await addPackages(formData,updatedFields)
+     const response = await addOrganizedPackage(formData,updatedFields)
     }catch(error){
        console.error(error, "error occured while recieving")
     }
