@@ -108,27 +108,28 @@ const agencyFetch = async (req,res)=>{
     }
 }
 
-const contactUs = async (req,res)=>{
+const contactUs = async (req, res) => {
     try {
-        const {name,email,phone,message} = req.body;
-        const userId = req.user?.id;
-       
-        const newMessage = new Contact({
-            userId,
-            name,
-            email,
-            phone,
-            message,
-        });
-
-        await newMessage.save();
-        res.status(201).json({success: true, message: "Contact request sent successfully."})
+      const { name, email, phone, message } = req.body;
+      const agencyId = req.user?.id; // For logged-in agencies (assuming agency uses the same auth system)
+  
+      const newMessage = new Contact({
+        agencyId,
+        name,
+        email,
+        phone,
+        message,
+        type: "agency", // Set type to "agency" for agency requests
+        read: false,
+      });
+  
+      await newMessage.save();
+      res.status(201).json({ success: true, message: "Contact request sent successfully." });
     } catch (error) {
-        console.error("Error saving contact request:", error);
-        res.status(500).json({ success: false, message: "Failed to send contact request." });
-        
+      console.error("Error saving contact request:", error);
+      res.status(500).json({ success: false, message: "Failed to send contact request." });
     }
-}
+  };
 
 
 module.exports = {register,login,agencyFetch,contactUs,logout}
