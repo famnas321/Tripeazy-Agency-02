@@ -3,47 +3,36 @@ const Agency = require("../model/AgencyModel");
 require("dotenv").config();
 const Blog = require("../model/Blog")
 
-
-
-
-
-
 exports.uploadImage = async (req, res) => {
   try {
 
       if (!req.file) {
-          return res.status(400).json({ message: "No file uploaded" });
+        return res.status(400).json({ message: "No file uploaded" });
       }
-
+  
       const folderMap = {
-          profile: "profile-images",
-          blog: "blogs",
-          package: "packages",
+        profile: "profile-images",
+        blog: "blogs",
+        package: "packages",
       };
-
+  
       const folder = folderMap[req.body.type] || "default-images";
-
-      // 🔥 Upload image directly from memory buffer
-      const { secure_url: imageUrl, public_id } = await new Promise((resolve, reject) => {
-          cloudinary.uploader.upload_stream(
-              { folder },
-              (error, result) => {
-                  if (error) reject(error);
-                  else resolve(result);
-              }
-          ).end(req.file.buffer);
-      });
-
+  
+      const { secure_url: imageUrl, public_id } = await cloudinary.uploader.upload(req.file.path, { folder });
+  
       if (req.body.type === "profile") {
-          await Agency.findByIdAndUpdate(
-              req.user.id,
-              { $set: { image: imageUrl } },
-              { new: true }
-          );
+       
+        
+        const updatedUser = await Agency.findByIdAndUpdate(
+          req.user.id,  
+          { $set: { image: imageUrl } },  // 🔥 Use `$set` to ensure only `image` field updates
+          { new: true }
+      );
+     
       }
-
+  
       res.status(200).json({ imageUrl, public_id, type: req.body.type });
-  } catch (error) {
+    } catch (error) {
       console.error("Error uploading image:", error);
       res.status(500).json({ message: "Server error" });
   }

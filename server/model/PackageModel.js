@@ -26,7 +26,7 @@ const PakageSchema = new mongoose.Schema({
 
     },
     phoneCode :{
-        type:Number,
+        type:String,
         required:true
 
     },
@@ -56,6 +56,13 @@ const PakageSchema = new mongoose.Schema({
     },
     ratings:{
       type:Number
-    }
+    },
+    images:[
+        {
+            type:String
+        }
+    ]
+
     
 })
+module.exports = mongoose.model("packageModel",PakageSchema)

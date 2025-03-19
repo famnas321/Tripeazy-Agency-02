@@ -37,3 +37,19 @@ export const addPackages =async (formData,updatedFields)=>{
 
     }
 }
+export const addOrganizedPackage = async (updatedFields,formData)=>{
+      try{
+        for (const [key, value] of Object.entries(updatedFields)) {
+            formData.append(key, value);
+          }
+
+          for (const pair of formData.entries()) {
+            console.log(pair[0], pair[1],"this is form api source page");
+          }
+         const orgaizedPackageResponse = await axiosInstanceFile.post("/packages/organizedPackages",formData)
+         return orgaizedPackageResponse.data
+
+      }catch(error){
+        throw error.response?error.response.data:error;
+      }
+}
