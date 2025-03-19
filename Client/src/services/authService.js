@@ -37,6 +37,14 @@ export const addPackages =async (formData,updatedFields)=>{
 
     }
 }
+export const fetchAddedPackages =async ()=>{
+  try{
+        const fetchPackageResponse = await axiosInstance.get("/packages/fetchPackages")
+        return fetchPackageResponse.data
+  }catch(error){
+    throw error.response?error.response.data:error 
+  }
+}
 export const addOrganizedPackage = async (updatedFields,formData)=>{
       try{
         for (const [key, value] of Object.entries(updatedFields)) {

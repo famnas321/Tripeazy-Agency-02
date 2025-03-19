@@ -50,7 +50,7 @@ const PakageSchema = new mongoose.Schema({
         required:true
 
     },
-    agency:{
+    agencyId:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"Agency"
     },
