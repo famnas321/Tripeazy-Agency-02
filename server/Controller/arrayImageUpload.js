@@ -1,7 +1,9 @@
 const cloudinary = require("../config/cloudinary");
 const packageModel = require("../model/PackageModel");
+const organizedPackage= require("../model/organizedPackage")
 
 exports.imageUpload = async (files, userId, type) => {
+    console.log(files,"this is fro")
     try {
         if (!files || files.length === 0) {
             return { status: 400, message: "No files uploaded" };
@@ -11,6 +13,7 @@ exports.imageUpload = async (files, userId, type) => {
             profile: "profile-images",
             blog: "blogs",
             package: "packages",
+            Organized:"Organized Package"
         };
 
         const folder = folderMap[type] || "default-images";
@@ -34,6 +37,14 @@ exports.imageUpload = async (files, userId, type) => {
 
         if (type === "package") {
             await packageModel.findByIdAndUpdate(
+                userId,
+                { $set: {images:uploadedImages}}, // Store an array of image URLs
+                { new: true }
+            );
+        }
+       
+        if (type === "Organized Package") {
+            await organizedPackage.findByIdAndUpdate(
                 userId,
                 { $set: {images:uploadedImages}}, // Store an array of image URLs
                 { new: true }
