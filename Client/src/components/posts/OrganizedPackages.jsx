@@ -1,8 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from 'react-router-dom';
+
+import { fetchOrganisedPackage } from 'src/services/authService';
+
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
+
 
 function OrganizedPackages() {
-  return (
+  const navigate= useNavigate()
+  const [orgPackages,setOrgPackages]=useState([])
+  const [selected,setSelected]=useState("")
+    useEffect(()=>{
+      const fetchData= async ()=>{
+        try{ 
+           const response = await fetchOrganisedPackage()
+          //  console.log(response)
+           setOrgPackages(response.response)
+
+        }catch(error){
+      console.error(error)
+        } 
+      }
+      fetchData()
+    },[])
+  console.log(orgPackages)
+  
+  const handleNavigation =(id)=>{
+   
+  //  const selectedPackage = orgPackages.find((orgPackages) => orgPackages._id === id);
+   const props =orgPackages.find((Packages) => Packages._id === id)
+   
+  navigate("/sample",{state:props})
+   
+  }
+  
+ 
+   return (
     <div className='w-full'>
       <div className="mt-4 flex justify-center items-center space-x-6">
        
@@ -43,10 +86,53 @@ function OrganizedPackages() {
       <div className="mb-5 flex justify-center">
         <hr className="w-1/2" />
       </div>
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
         <h1 className="text-gray-600">No  Organized Packages Here...🤷‍♂</h1>
+        </div> */}
+           <div className="py-10 px-5">
+  <h2 className="text-2xl font-bold text-center text-purple-600 mb-6">Features Posts</h2>
+  <div className="">
+  
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+     
+      {orgPackages.map((post, index) => (
+        <div key={index} className="w-full bg-white rounded-lg shadow-md">
+         
+         {post.images && (
+  <Slider {...settings}>
+    {post.images.map((image, idx) => (
+      <div key={idx}>
+        <img src={image} alt={`Post ${idx + 1}`} className="w-full h-40 object-cover" />
+      </div>
+    ))}
+  </Slider>
+)}
+          <div className="p-4">
+            
+            <span className={`px-3 py-1 text-sm font-semibold rounded ${post.categoryColor}`}>
+              Organized Trip
+            </span>
+            
+            <h3 className="mt-2 text-lg font-semibold">{post.destination
+            }</h3>
+            
+            <p className="text-gray-600 text-sm mt-1">{post.
+packageDescription
+}</p>
+            
+           
+           <button  onClick={(e)=>handleNavigation(post._id)}
+            className="text-purple-600 font-semibold text-sm mt-2 inline-block">Read More →</button>
+           
+          
+          </div>
         </div>
-        
+      ))}
+    </div>
+  </div>
+</div>
+          
+
       
       <div className="fixed bottom-5 right-5 ">
         <a 

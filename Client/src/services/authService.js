@@ -68,3 +68,12 @@ export const addOrganizedPackage = async (formData,updatedFields)=>{
         throw error.response?error.response.data:error;
       }
 }
+
+export const fetchOrganisedPackage = async ()=>{
+  try{
+      const response= await axiosInstance.get("/packages/getOrganizedPackages")
+      return response.data
+  }catch(error){
+    throw error.response?error.response.data:error;
+  }
+}

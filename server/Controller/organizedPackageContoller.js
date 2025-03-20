@@ -64,3 +64,13 @@ exports.addOrganizedPackage = async(req,res)=>{
          }
        
         }
+
+exports.getOrganizedPackages= async(req,res)=>{
+      try{
+     const response =  await organizedPackage.find()
+     res.status(200).json({message:"Organized packages are fetched succussfully",response})
+      }catch(error){
+     console.error(error)
+     res.status(500).json({error:"error occured while fetching organized packages",error})
+      }
+    }     
