@@ -40,7 +40,7 @@ function OrganizedPackages() {
   //  const selectedPackage = orgPackages.find((orgPackages) => orgPackages._id === id);
    const props =orgPackages.find((Packages) => Packages._id === id)
    
-  navigate("/sample",{state:props})
+  navigate("/posts/oganized/more",{state:props})
    
   }
   

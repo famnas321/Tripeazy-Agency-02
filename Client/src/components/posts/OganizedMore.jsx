@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-function Sample() {
+function OganizedMore() {
   const location = useLocation();
   const [selectedImage, setSelectedImage] = useState(0);
   const [datas, setDatas] = useState(null); 
@@ -118,4 +118,4 @@ returningDate
   );
 }
 
-export default Sample;
+export default OganizedMore;

@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
 import { postSearch } from "./packageSearch";
 
 const tabs = [
@@ -49,7 +49,7 @@ const Navigation = () => {
    const handleNavigation =(id)=>{
     console.log(id)
     const props=fetchedData.find((prop)=>prop._id === id)
-    navigate("/posts/organized/more",{state:props})
+    navigate("/posts/package/more",{state:props})
    }
 
    const categories = [
@@ -77,13 +77,17 @@ const Navigation = () => {
   }
 
   const  handleSearch= (e)=>{
+    e.preventDefault()
      if(e.target.value ===""){
       setSearch(null)
       return 
      }
      setInput(e.target.value)
      setSearch(postSearch(input,filteredData))
-       
+    //  if(search .length<0){
+    //    toast.error("No mathc")
+    //    console.log(error)
+    //  }  
        
   }
  
@@ -125,7 +129,7 @@ const Navigation = () => {
          type="text" placeholder="Search anything" class="bg-transparent w-full focus:outline-none pr-4 font-semibold border-0 focus:ring-0 px-0 py-0" name="topic"/>
         <button 
         onClick={handleSearch}
-        class="flex flex-row items-center justify-center min-w-[130px] px-4 rounded-full font-medium tracking-wide border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3">
+        class="flex flex-row items-center justify-center min-w-[130px] px-4 rounded-full  border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3">
             Search
         </button>
     </form>

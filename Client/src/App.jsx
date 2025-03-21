@@ -18,7 +18,7 @@ import Blogshow from './components/blogs/blogShow'
 import PackageGuides from './components/posts/PackageGuides'
 import OrganizedPackages from './components/posts/OrganizedPackages'
 import AddOrganizedPackage from './components/posts/AddOrganizedPackage'
-import Sample from './components/posts/Sample'
+import OganizedMore from './components/posts/OganizedMore'
 import MorePackage from './components/posts/MorePackage'
 
 function App() {
@@ -45,8 +45,8 @@ function App() {
           <Route path="/posts/package/guides" element={<PackageGuides/>}/>
           <Route path="/posts/package/addOrganizedPackage" element={<AddOrganizedPackage/>}/>
           <Route path="/blogs/:id" element={<Blogshow/>}/>
-          <Route path="/sample" element={<Sample/>}/>
-          <Route path="/posts/organized/more" element={<MorePackage/>}/>
+          <Route path="/posts/oganized/more" element={<OganizedMore/>}/>
+          <Route path="/posts/package/more" element={<MorePackage/>}/>
 
         </Route>
         
