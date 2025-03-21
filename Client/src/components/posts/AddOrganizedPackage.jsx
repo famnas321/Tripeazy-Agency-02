@@ -51,9 +51,9 @@ function AddOrganizedPackage() {
      if (images && Object.keys(images).length > 0) {
        setImageArray(Object.values(images));
      }
-   }, [images]);
+   },[images]);
    
- //  console.log(imageArray,"image Array is ")
+   console.log(imageArray,"image Array is ")
     
   const handleSubmit = async ()=>{
   
@@ -70,9 +70,9 @@ function AddOrganizedPackage() {
    formData.append("type","Organized Package")
    
    
-  //  for (const pair of formData.entries()) {
-  //    console.log(pair[0], pair[1],"this is form data");
-  //  }
+   for (const pair of formData.entries()) {
+     console.log(pair[0], pair[1],"this is form data");
+   }
  
  
    console.log("submitted")
@@ -80,6 +80,7 @@ function AddOrganizedPackage() {
      ...fields,
      country:selectedCountry?.name || "Unknown",
    }
+   console.log(formData,"Form data after updating ")
    
     try{
      const response = await addOrganizedPackage(formData,updatedFields)
@@ -99,7 +100,7 @@ function AddOrganizedPackage() {
      </nav>
       <div className=' mt-5 w-full h-scheen'>
        <div>
-         <h1 className='font-bold text-3xl'> Add  Your Package Detailes</h1>
+         <h1 className='font-bold text-3xl'> Add  Your Organized Package Detailes</h1>
          <h1 className=' mt-5 font-semibold text-1xl'> Describtion of Package</h1>
          <div className=" space-y-3 w-full">
    <textarea

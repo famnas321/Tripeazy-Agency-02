@@ -1,68 +1,65 @@
 const mongoose = require("mongoose")
 
-const PakageSchema = new mongoose.Schema({
-    companyDescription :{
-        type:String,
-    
-    },
-    destination :{
+const organazedSchema = new mongoose.Schema({
+    destination:{
         type:String,
         required:true
-
     },
-    destinationCategory :{
+    startingDestination:{
         type:String,
         required:true
-
     },
-    adult :{
+    adult:{
         type:Number,
         required:true
-
     },
-    minor :{
+    minor:{
         type:Number,
         required:true
-
     },
-    phoneCode :{
+    phoneCode:{
         type:String,
         required:true
-
     },
-    mobileNumber :{
+    mobileNumber:{
         type:Number,
         required:true
-
     },
-    currency :{
+    currency:{
         type:String,
         required:true
-
     },
-    payment :{
+    payment:{
         type:Number,
         required:true
-
     },
-    packageDescription :{
+    packageDescription:{
         type:String,
         required:true
-
+    },
+    startingDate:{
+        type:String,
+        required:true
+    },
+    returningDate:{
+        type:String,
+        required:true
     },
     agencyId:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"Agency"
-    },
-    ratings:{
-      type:Number
     },
     images:[
         {
             type:String
         }
     ]
-
-    
 })
-module.exports = mongoose.model("packageModel",PakageSchema)
+module.exports= mongoose.model("organizedPackage",organazedSchema)
+
+
+
+
+
+
+
