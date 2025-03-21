@@ -19,6 +19,7 @@ import PackageGuides from './components/posts/PackageGuides'
 import OrganizedPackages from './components/posts/OrganizedPackages'
 import AddOrganizedPackage from './components/posts/AddOrganizedPackage'
 import Sample from './components/posts/Sample'
+import MorePackage from './components/posts/MorePackage'
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/posts/package/addOrganizedPackage" element={<AddOrganizedPackage/>}/>
           <Route path="/blogs/:id" element={<Blogshow/>}/>
           <Route path="/sample" element={<Sample/>}/>
+          <Route path="/posts/organized/more" element={<MorePackage/>}/>
 
         </Route>
         

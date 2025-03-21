@@ -1,4 +1,5 @@
 const packageModel = require("../model/PackageModel")
+const Agency = require("../model/AgencyModel")
 const {imageUpload} = require("./arrayImageUpload")
 
 exports.addPackages = async (req,res)=>{
@@ -55,9 +56,13 @@ exports.addPackages = async (req,res)=>{
 }
 
 exports.fetchPackages =  async (req,res)=>{
+ 
      try{
-       const fetchedAgency = await packageModel.find()
+       const fetchedAgency = await packageModel.find().populate("agencyId")
+      
+       
        res.status(200).json({message:"Agency fetched Successfully" ,fetchedAgency})
+       console.log("success")
      }catch(error){
      console.log("error occured while fetching",error)
      res.status(500).json({error:" an error occured while agency feching",error})

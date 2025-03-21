@@ -4,6 +4,7 @@ import {fetchAddedPackages} from "../../services/authService"
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from "react-router-dom";
 
 const tabs = [
   { name: "Packages", path: "/posts" },
@@ -20,21 +21,55 @@ const settings = {
 };
 
 const Navigation = () => {
+  const navigate=useNavigate()
   const [fetchedData,setFetchedData]=useState([])
+  const [selectedButton,setSelectedButton]=useState("")
+  const [filteredData,setFilteredData]=useState([])
   useEffect(()=>{
    const fetchPackages = async ()=>{
     try{
       const response = await fetchAddedPackages()
-      
+      console.log(response)
        setFetchedData(response.fetchedAgency)
+       setFilteredData(response.fetchedAgency)
+      
   }catch(error){
       console.log(error)
 
  }
    }
    fetchPackages(fetchedData)
+   
   },[])
   console.log(fetchedData)
+   const handleNavigation =(id)=>{
+    console.log(id)
+    const props=fetchedData.find((prop)=>prop._id === id)
+    navigate("/posts/organized/more",{state:props})
+   }
+
+   const categories = [
+    { destinationCategory: "All" },
+    { destinationCategory: "Historical Places" },
+    { destinationCategory: "Top Cities" },
+    { destinationCategory: "Industries" },
+    { destinationCategory: "Beach" },
+    { destinationCategory: "Forest" },
+    { destinationCategory: "Adventure" },
+  ];
+
+  const handleTopButton= (catogory)=>{
+  console.log(catogory)
+  setSelectedButton(catogory)
+  if(catogory === "All"){
+    setFilteredData(fetchedData)
+  }else {
+    const filtered = fetchedData.filter(
+      (data) => data.destinationCategory === catogory
+    );
+    setFilteredData(filtered);
+  }
+  }
   return (
 
     <>
@@ -64,10 +99,26 @@ const Navigation = () => {
       <div className="py-10 px-5">
   <h2 className="text-2xl font-bold text-center text-purple-600 mb-6">Features Posts</h2>
   <div className="">
+  <div className="flex flex-wrap gap-2 p-4 justify-center">
+      {categories.map((category, index) => (
+        <button
+          key={index}
+          onClick={() => handleTopButton(category.destinationCategory)}
+          className={`text-white px-4 py-2 text-sm rounded-full transition duration-300 w-32 h-10 flex items-center justify-center truncate 
+            ${
+              selectedButton === category.destinationCategory
+                ? "bg-blue-950" // Apply this if the button is selected
+                : "bg-purple-700 hover:bg-blue-950" // Default and hover styles
+            }`}
+        >
+          {category.destinationCategory}
+        </button>
+      ))}
+    </div>
   
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+    <div className=" mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
      
-      {fetchedData.map((post, index) => (
+      {filteredData.map((post, index) => (
         <div key={index} className="w-full bg-white rounded-lg shadow-md">
          
          {post.images && (
@@ -84,12 +135,16 @@ const Navigation = () => {
             <span className={`px-3 py-1 text-sm font-semibold rounded ${post.categoryColor}`}>
               {post.destination}
             </span>
-            
+          
+
             <h3 className="mt-2 text-lg font-semibold">{post.destinationCategory}</h3>
+            <h3 className="mt-2 text-lg font-semibold">{post.agencyId.companyName}</h3>
+           
+            
             
             <p className="text-gray-600 text-sm mt-1">{post.companyDescription}</p>
             
-            <a href="#" className="text-purple-600 font-semibold text-sm mt-2 inline-block">Read More →</a>
+            <button onClick={(e)=>handleNavigation(post._id)} className="text-purple-600 font-semibold text-sm mt-2 inline-block">Read More →</button>
           </div>
         </div>
       ))}
