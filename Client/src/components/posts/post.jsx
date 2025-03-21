@@ -6,6 +6,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 
+import { postSearch } from "./packageSearch";
+
 const tabs = [
   { name: "Packages", path: "/posts" },
   { name: "Organized", path:"/posts/package/organized" },
@@ -25,6 +27,8 @@ const Navigation = () => {
   const [fetchedData,setFetchedData]=useState([])
   const [selectedButton,setSelectedButton]=useState("")
   const [filteredData,setFilteredData]=useState([])
+  const[search,setSearch]=useState([])
+  const[input,setInput]=useState()
   useEffect(()=>{
    const fetchPackages = async ()=>{
     try{
@@ -58,11 +62,12 @@ const Navigation = () => {
     { destinationCategory: "Adventure" },
   ];
 
-  const handleTopButton= (catogory)=>{
+  const handleTopButton=(catogory)=>{
+    setSearch(null)
   console.log(catogory)
   setSelectedButton(catogory)
   if(catogory === "All"){
-    setFilteredData(fetchedData)
+   setFilteredData(fetchedData)
   }else {
     const filtered = fetchedData.filter(
       (data) => data.destinationCategory === catogory
@@ -70,6 +75,19 @@ const Navigation = () => {
     setFilteredData(filtered);
   }
   }
+
+  const  handleSearch= (e)=>{
+     if(e.target.value ===""){
+      setSearch(null)
+      return 
+     }
+     setInput(e.target.value)
+     setSearch(postSearch(input,filteredData))
+       
+       
+  }
+ 
+  // console.log(search,"searched")
   return (
 
     <>
@@ -98,7 +116,21 @@ const Navigation = () => {
 
       <div className="py-10 px-5">
   <h2 className="text-2xl font-bold text-center text-purple-600 mb-6">Features Posts</h2>
+       
   <div className="">
+  <div class="grid justify-end">
+  <div class="flex justify-end px-4">
+    <form class="mt-10 w-full max-w-xl py-2 px-6 rounded-full bg-gray-50 border flex focus-within:border-gray-300">
+        <input onChange={handleSearch}
+         type="text" placeholder="Search anything" class="bg-transparent w-full focus:outline-none pr-4 font-semibold border-0 focus:ring-0 px-0 py-0" name="topic"/>
+        <button 
+        onClick={handleSearch}
+        class="flex flex-row items-center justify-center min-w-[130px] px-4 rounded-full font-medium tracking-wide border disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-150 text-base bg-black text-white font-medium tracking-wide border-transparent py-1.5 h-[38px] -mr-3">
+            Search
+        </button>
+    </form>
+</div>
+</div>
   <div className="flex flex-wrap gap-2 p-4 justify-center">
       {categories.map((category, index) => (
         <button
@@ -118,7 +150,7 @@ const Navigation = () => {
   
     <div className=" mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
      
-      {filteredData.map((post, index) => (
+      {(search && search.length >0 ?search :filteredData).map((post, index) => (
         <div key={index} className="w-full bg-white rounded-lg shadow-md">
          
          {post.images && (
