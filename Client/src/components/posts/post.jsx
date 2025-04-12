@@ -7,6 +7,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { postSearch } from "./packageSearch";
+import { useSelector } from "react-redux";
+import { popup } from "leaflet";
+import Skeletoncom from "../Skeleton";
 
 const tabs = [
   { name: "Packages", path: "/posts" },
@@ -23,14 +26,22 @@ const settings = {
 };
 
 const Navigation = () => {
+  const [loading,setLoading]=useState(false)
+  const authData= useSelector((state)=>state.auth.userInfo)
+ 
+  console.log(authData.status)
   const navigate=useNavigate()
   const [fetchedData,setFetchedData]=useState([])
   const [selectedButton,setSelectedButton]=useState("")
   const [filteredData,setFilteredData]=useState([])
   const[search,setSearch]=useState([])
   const[input,setInput]=useState()
+  const [status,setStatus]=useState(authData.status)
+  
+  
   useEffect(()=>{
    const fetchPackages = async ()=>{
+    setLoading(true)
     try{
       const response = await fetchAddedPackages()
       console.log(response)
@@ -40,6 +51,8 @@ const Navigation = () => {
   }catch(error){
       console.log(error)
 
+ }finally{
+  setLoading(false)
  }
    }
    fetchPackages(fetchedData)
@@ -95,12 +108,13 @@ const Navigation = () => {
   return (
 
     <>
-
+  
 
      
      <div className="w-full h-screen ">
       
       <div className="mt-4 flex justify-center items-center space-x-6">
+    
         {tabs.map((tab) => (
           <NavLink
             key={tab.name}
@@ -143,17 +157,28 @@ const Navigation = () => {
           className={`text-white px-4 py-2 text-sm rounded-full transition duration-300 w-32 h-10 flex items-center justify-center truncate 
             ${
               selectedButton === category.destinationCategory
-                ? "bg-blue-950" // Apply this if the button is selected
-                : "bg-purple-700 hover:bg-blue-950" // Default and hover styles
+                ? "bg-blue-950" 
+                : "bg-purple-700 hover:bg-blue-950" 
             }`}
         >
           {category.destinationCategory}
         </button>
       ))}
     </div>
-  
+    {loading && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+    {Array.from({ length: 4 }).map((_, i) => (
+      <Skeletoncom key={i} />
+    ))}
+  </div>
+)}
+
     <div className=" mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
-     
+    
+   
+
+
+ 
       {(search && search.length >0 ?search :filteredData).map((post, index) => (
         <div key={index} className="w-full bg-white rounded-lg shadow-md">
          
@@ -203,7 +228,8 @@ const Navigation = () => {
         </a>
       </div>
       </div>
-
+      
+   
     </>
   );
 };

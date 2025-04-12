@@ -147,7 +147,7 @@ function SignIn() {
         <div className="md:block hidden  bg-gray-900 rounded-2xl w-80">
           <img 
             className="rounded-2xl h-96 w-80"
-            src="/login.jpeg"
+            src="/login.jpg"
             alt="Login"
           />
           <p className='text-white mb-10 ml-3 mt-3'>WE MAKE IT <br/>

@@ -63,7 +63,7 @@ const login = async (req,res)=>{
         console.log(token,"from token");
 
         res.cookie("token",token,{
-            httpOnly:true,
+            httpOnly:false,
             secure:process.env.NODE_ENV === "production",
             sameSite:"strict",
             maxAge:30*24*60*60*1000
@@ -76,6 +76,19 @@ const login = async (req,res)=>{
         res.status(500).json({message:"internal error",error})
         console.log("error in Login control",error)
     }
+}
+ 
+const authenticatedUser=  async(req,res)=>{
+    const{id}=req.user.id
+      console.log(id)
+   try{
+     const authResponse= await Agency.findOne(id)
+      res.status(200).json(authResponse)
+   }
+   catch(error){
+   console.log(error)
+   res.send(500).json({error:" error occured while authentication of the user",error})
+   }
 }
 
 const logout = async (req,res)=>{
@@ -132,4 +145,4 @@ const contactUs = async (req, res) => {
   };
 
 
-module.exports = {register,login,agencyFetch,contactUs,logout}
+module.exports = {register,login,agencyFetch,contactUs,logout,authenticatedUser}

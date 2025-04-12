@@ -19,6 +19,16 @@ export const login= async (email,password)=>{
 
     }
 }
+export const authUser= async ()=>{
+  try{
+      const reponse = await axiosInstance.get("/authenticatedUser")
+      return reponse.data
+  }catch(error){
+    throw error.response?error.response.data:error;
+
+  }
+}
+
 export const addPackages =async (formData,updatedFields)=>{
     
     try{
