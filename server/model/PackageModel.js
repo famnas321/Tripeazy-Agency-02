@@ -13,8 +13,8 @@ const PakageSchema = new mongoose.Schema({
     destinationCategory :{
         type:String,
         required:true
-
     },
+
     adult :{
         type:Number,
         required:true
