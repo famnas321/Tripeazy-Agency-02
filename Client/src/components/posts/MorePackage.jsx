@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ArrowLeft } from "lucide-react";
+import { NavLink } from 'react-router-dom';
 
+import ReviewSection from './Reviews';
 function MorePackage() {
 
      const location = useLocation();
@@ -24,7 +27,25 @@ function MorePackage() {
       };
   return (
     <>
-    <nav className="h-32 bg-slate-500"></nav>
+    <nav className="h-20 shadow-md bg-white sticky -top-1 z-50 top-0 flex items-center justify-between px-4 relative">
+ 
+  <NavLink
+  to="/posts"
+    className="flex items-center gap-1 bg-blue-900 text-white px-6 py-1 rounded-full text-lg font-semibold hover:bg-blue-600 transition duration-300"
+  >
+    <ArrowLeft size={16} strokeWidth={2.5} />
+    <p className="font-light text-sm">Back</p>
+  </NavLink>
+
+
+  <div className="absolute left-1/2 transform -translate-x-1/2">
+    <h1 className="text-2xl font-semibold">More Package Info</h1>
+  </div>
+
+
+  <div className="w-[144px]"></div> 
+</nav>
+
 
     <div className="container mx-auto p-4">
       <div className="flex flex-wrap">
@@ -112,6 +133,8 @@ function MorePackage() {
         </p>
       </div>
     </div>
+    <ReviewSection/>
+    
     </>
   )
 }

@@ -50,10 +50,10 @@ function App() {
       }
     }
 
-    if (!authData) {
+    
       authentication()
-    }
-  }, [dispatch, authData])
+
+  }, [dispatch])
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

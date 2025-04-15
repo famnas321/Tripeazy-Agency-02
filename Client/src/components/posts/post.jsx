@@ -6,10 +6,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { postSearch } from "./packageSearch";
 import { useSelector } from "react-redux";
 import { popup } from "leaflet";
+
 import Skeletoncom from "../Skeleton";
+import { postSearch } from "./packageSearch";
+import Like from "src/Additional/Like";
+import SaveToggle from "src/Additional/Save";
 
 const tabs = [
   { name: "Packages", path: "/posts" },
@@ -28,15 +31,16 @@ const settings = {
 const Navigation = () => {
   const [loading,setLoading]=useState(false)
   const authData= useSelector((state)=>state.auth.userInfo)
- 
-  console.log(authData.status)
+  const userStatus= authData?.status
+  console.log(userStatus)
+  console.log(authData,"this is from post")
   const navigate=useNavigate()
   const [fetchedData,setFetchedData]=useState([])
   const [selectedButton,setSelectedButton]=useState("")
   const [filteredData,setFilteredData]=useState([])
   const[search,setSearch]=useState([])
   const[input,setInput]=useState()
-  const [status,setStatus]=useState(authData.status)
+  // const [status,setStatus]=useState(authData.status)
   
   
   useEffect(()=>{
@@ -113,7 +117,7 @@ const Navigation = () => {
      
      <div className="w-full h-screen ">
       
-      <div className="mt-4 flex justify-center items-center space-x-6">
+     <div className="mt-4 flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky top-0 z-50">
     
         {tabs.map((tab) => (
           <NavLink
@@ -205,7 +209,22 @@ const Navigation = () => {
             
             <p className="text-gray-600 text-sm mt-1">{post.companyDescription}</p>
             
-            <button onClick={(e)=>handleNavigation(post._id)} className="text-purple-600 font-semibold text-sm mt-2 inline-block">Read More →</button>
+            <div className="flex items-center justify-between mt-2 relative">
+  <button
+    onClick={(e) => handleNavigation(post._id)}
+    className="text-purple-600 font-semibold text-sm"
+  >
+    Read More →
+  </button>
+
+  <div className="flex items-center gap-2 p-1 rounded">
+  <Like />
+  <SaveToggle />
+</div>
+
+</div>
+
+           
           </div>
         </div>
       ))}
@@ -226,6 +245,8 @@ const Navigation = () => {
         className="bg-blue-500 text-white text-3xl w-16 h-16 flex items-center justify-center rotate-45 rounded-3xl">
           ×
         </a>
+
+       
       </div>
       </div>
       
