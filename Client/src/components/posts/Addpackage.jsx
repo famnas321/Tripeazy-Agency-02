@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Country, State, City } from "country-state-city";
+import { NavLink } from 'react-router-dom';
+import { ArrowLeft } from "lucide-react";
 
 import PackageImage from './PackageImage';
 import { addPackages } from 'src/services/authService';
@@ -93,9 +95,28 @@ function Addpackage() {
 
   return (
 <>
-   <nav className='w-full h-16 bg-slate-500'>
-      <hr className='w-1/2'/>
-    </nav>
+<nav className="h-16 shadow-md bg-white sticky top-0 z-50 flex items-center justify-between px-4">
+  {/* Left Side - Back Button */}
+  <NavLink
+    to="/posts"
+    className="flex items-center gap-1 bg-blue-900 text-white px-4 py-1 rounded-full text-sm sm:text-base font-medium hover:bg-blue-600 transition duration-300"
+  >
+    <ArrowLeft size={16} strokeWidth={2.5} />
+    <span className="hidden sm:inline font-light text-sm">Back</span>
+  </NavLink>
+
+  {/* Center - Title */}
+  <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+    <h1 className="text-lg sm:text-xl md:text-2xl font-semibold whitespace-nowrap">
+      More Package Info
+    </h1>
+  </div>
+
+  {/* Right Side - Spacer */}
+  <div className="w-[100px] sm:w-[144px]"></div>
+</nav>
+
+  
      <div className=' mt-5 w-full h-scheen'>
       <div>
         <h1 className='font-bold text-3xl'> Add  Your Package Detailes</h1>

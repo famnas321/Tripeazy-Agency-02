@@ -61,8 +61,21 @@ const PakageSchema = new mongoose.Schema({
         {
             type:String
         }
-    ]
-
+    ],
+    likedBy: [
+        {
+          user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+         },
+          status: {
+            type: Boolean,
+            default: false,
+          }
+        }
+      ]
+      
+  
     
 })
 module.exports = mongoose.model("packageModel",PakageSchema)
