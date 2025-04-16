@@ -27,24 +27,27 @@ function MorePackage() {
       };
   return (
     <>
-    <nav className="h-20 shadow-md bg-white sticky -top-1 z-50 top-0 flex items-center justify-between px-4 relative">
+   <nav className="h-16 shadow-md bg-white sticky top-0 z-50 flex items-center justify-between px-4">
  
   <NavLink
-  to="/posts"
-    className="flex items-center gap-1 bg-blue-900 text-white px-6 py-1 rounded-full text-lg font-semibold hover:bg-blue-600 transition duration-300"
+    to="/posts"
+    className="flex items-center gap-1 bg-blue-900 text-white px-4 py-1 rounded-full text-sm sm:text-base font-medium hover:bg-blue-600 transition duration-300"
   >
     <ArrowLeft size={16} strokeWidth={2.5} />
-    <p className="font-light text-sm">Back</p>
+    <span className="hidden sm:inline font-light text-sm">Back</span>
   </NavLink>
 
-
-  <div className="absolute left-1/2 transform -translate-x-1/2">
-    <h1 className="text-2xl font-semibold">More Package Info</h1>
+ 
+  <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+    <h1 className="text-lg sm:text-xl md:text-2xl font-semibold whitespace-nowrap">
+      More Package Info
+    </h1>
   </div>
 
 
-  <div className="w-[144px]"></div> 
+  <div className="w-[100px] sm:w-[144px]"></div>
 </nav>
+
 
 
     <div className="container mx-auto p-4">
@@ -69,6 +72,13 @@ function MorePackage() {
               />
             ))}
           </div>
+          <div className="w-3/4 sm:w-1/2 md:w-1/2">
+  <h3 className='text-slate-600'>Catogory </h3>
+  <p>{datas.destinationCategory}
+    
+  </p>
+</div>
+
         </div>
 
        
@@ -108,12 +118,6 @@ function MorePackage() {
       </div>
       <div className="w-1/2 flex flex-row">
 
-<div className="w-3/4 sm:w-1/2 md:w-1/2">
-  <h3 className='text-slate-600'>Catogory </h3>
-  <p>{datas.destinationCategory}
-    
-  </p>
-</div>
 
 
 
