@@ -55,16 +55,37 @@ exports.addPackages = async (req,res)=>{
    
 }
 
-exports.fetchPackages =  async (req,res)=>{
- 
-     try{
-       const fetchedAgency = await packageModel.find().populate("agencyId")
-      
-       
-       res.status(200).json({message:"Agency fetched Successfully" ,fetchedAgency})
-       console.log("success")
-     }catch(error){
-     console.log("error occured while fetching",error)
-     res.status(500).json({error:" an error occured while agency feching",error})
-     }
-}
+exports.fetchPackages = async (req, res) => {
+  try {
+   console.log(req.query.page);
+   console.log(req.query.limit);
+   
+    const page = parseInt(req.query.page) || 1;  // Default page = 1
+    const limit = parseInt(req.query.limit) || 4; // Default limit = 4
+    const skip = (page -1) * limit;
+    console.log(limit,skip,"this is limit and skip");
+    
+    const fetchedAgency = await packageModel
+      .find() 
+      .skip(skip)
+      .limit(limit)
+      .populate("agencyId");
+
+    const totalCount = await packageModel.countDocuments();
+
+    res.status(200).json({
+      message: "Agency fetched Successfully",
+      fetchedAgency,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+    });
+
+    console.log("success");
+  } catch (error) {
+    console.log("error occurred while fetching", error);
+    res.status(500).json({
+      error: "An error occurred while agency fetching",
+      details: error.message,
+    });
+  }
+};

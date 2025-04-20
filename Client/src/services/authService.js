@@ -47,14 +47,16 @@ export const addPackages =async (formData,updatedFields)=>{
 
     }
 }
-export const fetchAddedPackages =async (formData,updatedFields)=>{
-  try{
-        const fetchPackageResponse = await axiosInstance.get("/packages/fetchPackages")
-        return fetchPackageResponse.data
-  }catch(error){
-    throw error.response?error.response.data:error 
+export const fetchAddedPackages = async (page = 1, limit = 4) => {
+  try {
+    const response = await axiosInstance.get("/packages/fetchPackages", {
+      params: { page, limit },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
   }
-}
+};
 export const addOrganizedPackage = async (formData,updatedFields)=>{
       try{
 
