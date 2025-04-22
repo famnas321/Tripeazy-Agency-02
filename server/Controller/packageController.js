@@ -57,16 +57,31 @@ exports.addPackages = async (req,res)=>{
 
 exports.fetchPackages = async (req, res) => {
   try {
-   console.log(req.query.page);
-   console.log(req.query.limit);
-   
-    const page = parseInt(req.query.page) || 1;  // Default page = 1
-    const limit = parseInt(req.query.limit) || 4; // Default limit = 4
+ 
+    const page = parseInt(req.query.page) || 1;  
+    const limit = parseInt(req.query.limit) || 4; 
+    const {searchQuery,catagory}=req.query
+    
     const skip = (page -1) * limit;
-    console.log(limit,skip,"this is limit and skip");
+    console.log(searchQuery,catagory,"this is search  and catogory");
+    let query={}
+      
+    if (catagory !== "All") {
+      query.destinationCategory = new RegExp(catagory, "i");
+    }
+    
+    if(searchQuery){
+      const regExp= new RegExp(searchQuery,"i")
+      query.$or=[
+        { destination:regExp},
+        { destinationCategory:regExp},
+        { companyName:regExp},
+       
+      ]
+    }
     
     const fetchedAgency = await packageModel
-      .find() 
+      .find(query) 
       .skip(skip)
       .limit(limit)
       .populate("agencyId");
@@ -80,6 +95,7 @@ exports.fetchPackages = async (req, res) => {
       totalPages: Math.ceil(totalCount / limit),
     });
 
+    console.log(query);
     console.log("success");
   } catch (error) {
     console.log("error occurred while fetching", error);

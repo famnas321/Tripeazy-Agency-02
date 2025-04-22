@@ -28,57 +28,79 @@ const Navigation = () => {
   const [hasMore, setHasMore] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-
+  const [catagory, setCatagory] = useState("All");
   const observer = useRef();
   const pageRef = useRef(1);
-  const initialFetchDone = useRef(false); 
 
   const navigate = useNavigate();
 
-  const fetchPackages = useCallback(async () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    try {
-     
-      const response = await fetchAddedPackages(pageRef.current, 4);
-      if (response?.fetchedAgency?.length > 0) {
-        setFetchedData((prev) => [...prev, ...response.fetchedAgency]);
-        if (response.fetchedAgency.length < 4) {
-          setHasMore(false);
-        } else {
-          pageRef.current += 1;
-        }
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Failed to fetch packages:", error);
-    } finally {
-      setLoading(false);
-      setInitialLoadComplete(true);
-    }
-  }, [loading, hasMore]);
-
-
   useEffect(() => {
-    if (!initialFetchDone.current) {
-      initialFetchDone.current = true;
-      fetchPackages();
-    }
-  }, [fetchPackages]);
+    const fetchPackages = async () => {
+      setLoading(true);
+      try {
+        const response = await fetchAddedPackages(
+          pageRef.current,
+          4,
+          searchQuery,
+          catagory
+        );
 
-   console.log(fetchedData, "this is data");
-   
+        if (response?.fetchedAgency?.length > 0) {
+          setFetchedData(response.fetchedAgency);
+          if (response.fetchedAgency.length < 4) {
+            setHasMore(false);
+          } else {
+            pageRef.current += 1;
+          }
+        } else {
+          setHasMore(false);
+        }
+      } catch (error) {
+        console.error("Failed to fetch packages:", error);
+      } finally {
+        setLoading(false);
+        setInitialLoadComplete(true);
+      }
+    };
+
+    setFetchedData([]);
+    setHasMore(true);
+    pageRef.current = 1;
+    setInitialLoadComplete(false);
+    fetchPackages();
+  }, [searchQuery, catagory]);
+
   const lastItemRef = useCallback(
     (node) => {
-      if (loading || !initialLoadComplete) return; 
-      if (observer.current) observer.current.disconnect();// this clean  previous observer
+      if (loading || !initialLoadComplete) return;
+      if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver(
-        (entries) => {
+        async (entries) => {
           if (entries[0].isIntersecting && hasMore && !loading) {
-            fetchPackages();
+            setLoading(true);
+            try {
+              const response = await fetchAddedPackages(
+                pageRef.current,
+                4,
+                searchQuery,
+                catagory
+              );
+              if (response?.fetchedAgency?.length > 0) {
+                setFetchedData((prev) => [...prev, ...response.fetchedAgency]);
+                if (response.fetchedAgency.length < 4) {
+                  setHasMore(false);
+                } else {
+                  pageRef.current += 1;
+                }
+              } else {
+                setHasMore(false);
+              }
+            } catch (error) {
+              console.error("Failed to fetch packages:", error);
+            } finally {
+              setLoading(false);
+            }
           }
         },
         { threshold: 0.5 }
@@ -86,7 +108,7 @@ const Navigation = () => {
 
       if (node) observer.current.observe(node);
     },
-    [fetchPackages, loading, hasMore, initialLoadComplete]
+    [loading, hasMore, initialLoadComplete, searchQuery, catagory]
   );
 
   const handleNavigation = (id) => {
@@ -103,10 +125,9 @@ const Navigation = () => {
     { destinationCategory: "Forest" },
     { destinationCategory: "Adventure" },
   ];
-
+  console.log(fetchedData)
   return (
     <div className="w-full">
-      {/* Navigation Tabs */}
       <div className="mt-4 flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky top-0 z-50">
         {tabs.map((tab) => (
           <NavLink
@@ -125,7 +146,6 @@ const Navigation = () => {
         ))}
       </div>
 
-
       <div className="flex justify-center p-4">
         <input
           type="text"
@@ -136,19 +156,22 @@ const Navigation = () => {
         />
       </div>
 
-      
       <div className="flex flex-wrap gap-2 p-4 justify-center">
         {categories.map((category, index) => (
           <button
             key={index}
-            className="text-white px-4 py-2 text-sm rounded-full transition duration-300 w-32 h-10 flex items-center justify-center truncate bg-purple-700 hover:bg-blue-950"
+            onClick={() => setCatagory(category.destinationCategory)}
+            className={`text-white px-4 py-2 text-sm rounded-full transition duration-300 w-32 h-10 flex items-center justify-center truncate ${
+              catagory === category.destinationCategory
+                ? "bg-blue-700"
+                : "bg-purple-700 hover:bg-blue-950"
+            }`}
           >
             {category.destinationCategory}
           </button>
         ))}
       </div>
 
-      
       <div className="py-10 px-5">
         <h2 className="text-2xl font-bold text-center text-purple-600 mb-6">
           Featured Posts
@@ -195,7 +218,9 @@ const Navigation = () => {
                     {post.agencyId?.companyName}
                   </h3>
                   <p className="text-gray-600 text-sm mt-1">
-                    {post.packageDescription.length >100 ? post.packageDescription.slice(0,100)+"...":post.packageDescription }
+                    {post.packageDescription.length > 100
+                      ? post.packageDescription.slice(0, 100) + "..."
+                      : post.packageDescription}
                   </p>
                   <div className="flex items-center justify-between mt-2">
                     <button
@@ -229,7 +254,6 @@ const Navigation = () => {
 
       <div style={{ height: "100px" }}></div>
 
-      {/* Floating Add Button */}
       <div className="fixed bottom-5 right-5">
         <a
           href="/addPackage"
