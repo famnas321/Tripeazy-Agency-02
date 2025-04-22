@@ -47,14 +47,15 @@ export const addPackages =async (formData,updatedFields)=>{
 
     }
 }
-export const fetchAddedPackages = async (page = 1, limit = 4) => {
+export const fetchAddedPackages = async (page, limit = 4,searchQuery,catagory) => {
   try {
+    console.log(catagory,searchQuery,"this is catogory from just above of the api")
     const response = await axiosInstance.get("/packages/fetchPackages", {
-      params: { page, limit },
+      params: { page, limit,searchQuery,catagory},
     });
     return response.data;
   } catch (error) {
-    throw error.response ? error.response.data : error;
+    throw error.response ? error.response.data : error; 
   }
 };
 export const addOrganizedPackage = async (formData,updatedFields)=>{
