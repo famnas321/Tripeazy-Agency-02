@@ -57,7 +57,7 @@ exports.addPackages = async (req,res)=>{
 
 exports.fetchPackages = async (req, res) => {
   try {
- 
+    const id =req.user.id
     const page = parseInt(req.query.page) || 1;  
     const limit = parseInt(req.query.limit) || 4; 
     const {searchQuery,catagory}=req.query
@@ -91,9 +91,20 @@ exports.fetchPackages = async (req, res) => {
     res.status(200).json({message:`No package found for search: "${searchQuery || 'N/A'}" or category: "${catagory || 'N/A'}"`,})
     return
    }
+
+   const PackagesWithLikedCount= fetchedAgency.map((pkg)=>{
+    const likeCount = pkg.likedBy.filter((like)=> like.status=== true).length;
+    // const isLiked= pkg.likedBy.find((like)=>like.user=== id)
+   
+    return {
+      ...pkg.toObject(),
+      likeCount
+    }
+   })
+  
     res.status(200).json({
       message: "Agency fetched Successfully",
-      fetchedAgency,
+      fetchedAgency:PackagesWithLikedCount,
       currentPage: page,
       totalPages: Math.ceil(totalCount / limit),
     });
@@ -110,8 +121,9 @@ exports.fetchPackages = async (req, res) => {
 };
 exports.updateLike = async (req, res) => {
   const userId = req.user.id; 
+  console.log(userId,"this is userId")
   const { status,packageId } = req.body;
-  console.log(packageId,"this is package id")
+  console.log(status,"this is status")
   try {
   
     const package = await packageModel.findById(packageId);
@@ -131,7 +143,7 @@ exports.updateLike = async (req, res) => {
       });
     }
     await package.save();
-
+    console.log(package,"after updating")
     res.status(200).json({
       message: status ? "Liked" : "Unliked",
       likedBy: package.likedBy,

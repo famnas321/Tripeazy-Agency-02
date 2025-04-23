@@ -40,9 +40,11 @@ function SignIn() {
    
    try{
    const response = await login(email,password)
-   localStorage.setItem("token",response.token)
+   
    console.log("Login Succussfull",response);
-   navigate("/")
+   if(response){
+    navigate("/")
+   }
    
    }catch(error){
     toast.error(error)

@@ -29,6 +29,7 @@ const Navigation = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [catagory, setCatagory] = useState("All");
+  const [likeToggle,setLikeToggle]=useState()
   const observer = useRef();
   const pageRef = useRef(1);
 
@@ -44,6 +45,7 @@ const Navigation = () => {
           searchQuery,
           catagory
         );
+         console.log(response,"this is response")
 
         if (response?.fetchedAgency?.length > 0) {
           setFetchedData(response.fetchedAgency);
@@ -68,7 +70,7 @@ const Navigation = () => {
     pageRef.current = 1;
     setInitialLoadComplete(false);
     fetchPackages();
-  }, [searchQuery, catagory]);
+  }, [searchQuery, catagory,likeToggle]);
 
   const lastItemRef = useCallback(
     (node) => {
@@ -125,7 +127,7 @@ const Navigation = () => {
     { destinationCategory: "Forest" },
     { destinationCategory: "Adventure" },
   ];
-  console.log(fetchedData)
+  console.log(fetchedData,"this is fetched data")
   return (
     <div className="w-full ">
       <div className= "flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky -top-1 z-50">
@@ -231,9 +233,12 @@ const Navigation = () => {
                     </button>
                     <div className="flex items-center gap-2">
                     <Like 
-                       
-                      packageId={post._id}          
-/>
+                          packageId={post._id}
+                          like={post.likeCount}
+                          likedBy={post.likedBy}
+                          onToggle={() => setLikeToggle(prev => !prev)}
+                        />
+                      <p>{post.likeCount}</p>
                       <SaveToggle />
                     </div>
                   </div>

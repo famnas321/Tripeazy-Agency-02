@@ -49,6 +49,7 @@ const login = async (req,res)=>{
     try {
         const existingUser = await Agency.findOne({email})
         if(!existingUser){
+            console.log(existingUser,"from login ctrl")
             return res.status(404).json("user not found")
         }
 
@@ -60,8 +61,9 @@ const login = async (req,res)=>{
         const token = jwt.sign({
             id:existingUser._id, email:existingUser.email
         },process.env.JWT_SECRET,{expiresIn:"30d"})
-        console.log(token,"from token");
-
+    //     console.log(token,"from token");
+    //    console.log(existingUser._id,"existing id");
+       
         res.cookie("token",token,{
             httpOnly:false,
             secure:process.env.NODE_ENV === "production",
@@ -79,10 +81,12 @@ const login = async (req,res)=>{
 }
  
 const authenticatedUser=  async(req,res)=>{
-    const{id}=req.user.id
-      console.log(id)
+    const id=req.user.id
+    
+      console.log(id,"from authenticated user")
    try{
-     const authResponse= await Agency.findOne(id)
+     const authResponse= await Agency.findOne({_id:id})
+      console.log(authResponse,"from auth")
       res.status(200).json(authResponse)
    }
    catch(error){
