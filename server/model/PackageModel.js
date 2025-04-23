@@ -71,7 +71,7 @@ const PakageSchema = new mongoose.Schema({
           },
           userModel: {
             type: String,
-            required: true,
+          
             enum: ["User", "Agency"], 
           },
           status: {

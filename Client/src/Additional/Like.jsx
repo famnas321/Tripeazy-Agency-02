@@ -13,7 +13,7 @@ const Like = ({ packageId }) => {
     try {
       console.log(status,"this is from like component");
       
-      const response = await addLike({status:status}); 
+      const response = await addLike({ status, packageId }); 
       console.log("API Response:", response);
     } catch (error) {
       console.error("Like API Error:", error);

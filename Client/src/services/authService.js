@@ -91,15 +91,15 @@ export const fetchOrganisedPackage = async ()=>{
     throw error.response?error.response.data:error;
   }
 }
-export const addLike =  async (status)=>{
-  if(!status){
+export const addLike =  async ({status,packageId})=>{
+  if(!status&& !packageId){
     console.log("there is no status in like api")
     return
   }
  try{
-  console.log(status,"there is status from api");
+  console.log(status)
   
-  const response = await axiosInstance.put("/packages/likes",status)
+  const response = await axiosInstance.put("/packages/likes",{status,packageId})
   return response.data
  }catch(error){
   throw error.response?error.response.data:error;

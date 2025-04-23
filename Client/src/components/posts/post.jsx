@@ -232,7 +232,7 @@ const Navigation = () => {
                     <div className="flex items-center gap-2">
                     <Like 
                        
-                      id={post._id}          
+                      packageId={post._id}          
 />
                       <SaveToggle />
                     </div>
