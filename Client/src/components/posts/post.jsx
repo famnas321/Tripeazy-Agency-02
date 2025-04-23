@@ -127,8 +127,8 @@ const Navigation = () => {
   ];
   console.log(fetchedData)
   return (
-    <div className="w-full">
-      <div className="mt-4 flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky top-0 z-50">
+    <div className="w-full ">
+      <div className= "flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky -top-1 z-50">
         {tabs.map((tab) => (
           <NavLink
             key={tab.name}
@@ -163,7 +163,7 @@ const Navigation = () => {
             onClick={() => setCatagory(category.destinationCategory)}
             className={`text-white px-4 py-2 text-sm rounded-full transition duration-300 w-32 h-10 flex items-center justify-center truncate ${
               catagory === category.destinationCategory
-                ? "bg-blue-700"
+                ? "bg-blue-950"
                 : "bg-purple-700 hover:bg-blue-950"
             }`}
           >
@@ -230,7 +230,10 @@ const Navigation = () => {
                       Read More →
                     </button>
                     <div className="flex items-center gap-2">
-                      <Like />
+                    <Like 
+                       
+                      id={post._id}          
+/>
                       <SaveToggle />
                     </div>
                   </div>
@@ -247,7 +250,7 @@ const Navigation = () => {
         )}
         {!hasMore && (
           <div className="text-center py-4 font-medium text-gray-500">
-            You've reached the end.
+           No More Packages
           </div>
         )}
       </div>

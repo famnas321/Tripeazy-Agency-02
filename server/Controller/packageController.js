@@ -87,7 +87,10 @@ exports.fetchPackages = async (req, res) => {
       .populate("agencyId");
 
     const totalCount = await packageModel.countDocuments();
-
+   if(fetchedAgency.length === 0){
+    res.status(200).json({message:`No package found for search: "${searchQuery || 'N/A'}" or category: "${catagory || 'N/A'}"`,})
+    return
+   }
     res.status(200).json({
       message: "Agency fetched Successfully",
       fetchedAgency,
@@ -105,3 +108,15 @@ exports.fetchPackages = async (req, res) => {
     });
   }
 };
+exports.updateLike =  async (req,res)=>{
+  try{
+     console.log(req.body)
+     console.log(req.user.id)
+     const {status}= req.body
+     console.log(status,"this is liked ")
+
+
+  }catch(error){
+ res.status(500).json({message:"an error occured while add like ",error:error})
+  }
+}

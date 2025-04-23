@@ -66,14 +66,21 @@ const PakageSchema = new mongoose.Schema({
         {
           user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-         },
+            required: true,
+            refPath: "likedBy.userModel", 
+          },
+          userModel: {
+            type: String,
+            required: true,
+            enum: ["User", "Agency"], 
+          },
           status: {
             type: Boolean,
-            default: false,
-          }
-        }
-      ]
+            default:false,
+          },
+        },
+      ],
+      
       
   
     
