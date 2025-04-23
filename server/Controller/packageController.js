@@ -63,7 +63,7 @@ exports.fetchPackages = async (req, res) => {
     const {searchQuery,catagory}=req.query
     
     const skip = (page -1) * limit;
-    console.log(searchQuery,catagory,"this is search  and catogory");
+    // console.log(searchQuery,catagory,"this is search  and catogory");
     let query={}
       
     if (catagory !== "All") {
@@ -87,7 +87,10 @@ exports.fetchPackages = async (req, res) => {
       .populate("agencyId");
 
     const totalCount = await packageModel.countDocuments();
-
+   if(fetchedAgency.length === 0){
+    res.status(200).json({message:`No package found for search: "${searchQuery || 'N/A'}" or category: "${catagory || 'N/A'}"`,})
+    return
+   }
     res.status(200).json({
       message: "Agency fetched Successfully",
       fetchedAgency,
@@ -95,7 +98,7 @@ exports.fetchPackages = async (req, res) => {
       totalPages: Math.ceil(totalCount / limit),
     });
 
-    console.log(query);
+    // console.log(query);
     console.log("success");
   } catch (error) {
     console.log("error occurred while fetching", error);
@@ -105,3 +108,40 @@ exports.fetchPackages = async (req, res) => {
     });
   }
 };
+exports.updateLike = async (req, res) => {
+  const userId = req.user.id; 
+  const { status,packageId } = req.body;
+  console.log(packageId,"this is package id")
+  try {
+  
+    const package = await packageModel.findById(packageId);
+    if (!package) {
+      return res.status(404).json({ message: "Package not found" });
+    }
+    const existingLike = package.likedBy.find(
+      (like) => like.user.toString() === userId
+    );
+
+    if (existingLike) {
+       existingLike.status = status;
+    } else {
+        package.likedBy.push({
+        user: userId,
+        status: status,
+      });
+    }
+    await package.save();
+
+    res.status(200).json({
+      message: status ? "Liked" : "Unliked",
+      likedBy: package.likedBy,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "An error occurred while updating like status",
+      error: error.message,
+    });
+  }
+};
+

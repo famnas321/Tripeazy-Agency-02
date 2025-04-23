@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
 import axiosInstanceFile from "src/utils/axiosInstanceFile";
 export const register = async (formData) => {
@@ -89,4 +90,18 @@ export const fetchOrganisedPackage = async ()=>{
   }catch(error){
     throw error.response?error.response.data:error;
   }
+}
+export const addLike =  async ({status,packageId})=>{
+  if(!status&& !packageId){
+    console.log("there is no status in like api")
+    return
+  }
+ try{
+  console.log(status)
+  
+  const response = await axiosInstance.put("/packages/likes",{status,packageId})
+  return response.data
+ }catch(error){
+  throw error.response?error.response.data:error;
+ }
 }
