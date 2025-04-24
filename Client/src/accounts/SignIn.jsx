@@ -43,7 +43,9 @@ function SignIn() {
    
    console.log("Login Succussfull",response);
    if(response){
-    navigate("/")
+   
+      window.location.href = "/";
+    
    }
    
    }catch(error){

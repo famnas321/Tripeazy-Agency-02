@@ -6,7 +6,7 @@ function RestrictRoute({ children }) {
     const authData = useSelector((state) => state.auth.userInfo);
    console.log(authData,"this is from restrict route")
     if (!authData) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/login" />;
     }
 
     return children;
