@@ -74,21 +74,21 @@ function App() {
           <Route
             path="/"
             element={<RestrictRoute><Home /></RestrictRoute>} />
-          <Route path='/clients' element={<Clients />} />
-          <Route path='posts' element={<Post />} />
-          <Route path='blogs' element={<Blog />} />
-          <Route path='messages' element={<Messages />} />
-          <Route path='contact-us' element={<Contact />} />
-          <Route path='advertisments' element={<Addvertisment />} />
+          <Route path='/clients' element={<RestrictRoute><Clients /></RestrictRoute>} />
+          <Route path='posts' element={<RestrictRoute><Post /></RestrictRoute>} />
+          <Route path='blogs' element={<RestrictRoute><Blog /></RestrictRoute>} />
+          <Route path='messages' element={<RestrictRoute><Messages /></RestrictRoute>} />
+          <Route path='contact-us' element={<RestrictRoute><Contact /></RestrictRoute>} />
+          <Route path='advertisments' element={<RestrictRoute><Addvertisment /></RestrictRoute>} />
           <Route path='profile' element={<Profiles />} />
-          <Route path="/blogs/post-blog" element={<PostBlog />} />
-          <Route path="/addPackage" element={<Addpackage />} />
-          <Route path="/posts/package/organized" element={<OrganizedPackages />} />
-          <Route path="/posts/package/guides" element={<PackageGuides />} />
-          <Route path="/posts/package/addOrganizedPackage" element={<AddOrganizedPackage />} />
-          <Route path="/blogs/:id" element={<Blogshow />} />
-          <Route path="/posts/oganized/more" element={<OganizedMore />} />
-          <Route path="/posts/package/more" element={<MorePackage />} />
+          <Route path="/blogs/post-blog" element={<RestrictRoute><PostBlog /></RestrictRoute>} />
+          <Route path="/addPackage" element={<RestrictRoute><Addpackage /></RestrictRoute>} />
+          <Route path="/posts/package/organized" element={<RestrictRoute><OrganizedPackages /></RestrictRoute>} />
+          <Route path="/posts/package/guides" element={<RestrictRoute><PackageGuides /></RestrictRoute>} />
+          <Route path="/posts/package/addOrganizedPackage" element={<RestrictRoute><AddOrganizedPackage /></RestrictRoute>} />
+          <Route path="/blogs/:id" element={<RestrictRoute><Blogshow /></RestrictRoute>} />
+          <Route path="/posts/oganized/more" element={<RestrictRoute><OganizedMore /></RestrictRoute>} />
+          <Route path="/posts/package/more" element={<RestrictRoute><MorePackage /></RestrictRoute>} />
 
         </Route>
 
