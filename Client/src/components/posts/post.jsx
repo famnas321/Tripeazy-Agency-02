@@ -263,12 +263,12 @@ const Navigation = () => {
       <div style={{ height: "100px" }}></div>
 
       <div className="fixed bottom-5 right-5">
-        <a
-          href="/addPackage"
+        <NavLink
+          to="/posts/package/addPackage"
           className="bg-blue-500 text-white text-3xl w-16 h-16 flex items-center justify-center rotate-45 rounded-3xl"
         >
           ×
-        </a>
+        </NavLink>
       </div>
     </div>
   );

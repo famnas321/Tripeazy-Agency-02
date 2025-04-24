@@ -5,8 +5,13 @@ import { ArrowLeft } from "lucide-react";
 
 import PackageImage from './PackageImage';
 import { addPackages } from 'src/services/authService';
+import AccessPopup from '../AccessPopup';
+import { useSelector } from 'react-redux';
 
 function Addpackage() {
+  const authData = useSelector((state) => state.auth.userInfo);
+  const hasAccess= authData?.status=="Accepted"? true:false
+  const [showPopUp,setShowPopUP]=useState(false)
   const [country,setCountry]= useState(Country.getAllCountries())
   const [state,setState]=useState([])
   const [city,setCity]=useState([])
@@ -55,6 +60,10 @@ function Addpackage() {
 //  console.log(imageArray,"image Array is ")
    
  const handleSubmit = async ()=>{
+  if(!hasAccess){
+    setShowPopUP(true)
+    return
+  }
   if (imageArray.length === 0) {
     console.error("No images selected.");
     
@@ -322,6 +331,9 @@ function Addpackage() {
   Submit
 </button>
 </div>
+ {!hasAccess && showPopUp && (
+        <AccessPopup onClose={() => setShowPopUP(false)} />
+      )}
         </div>    
     </div>
     </>

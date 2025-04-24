@@ -82,7 +82,7 @@ function App() {
           <Route path='advertisments' element={<RestrictRoute><Addvertisment /></RestrictRoute>} />
           <Route path='profile' element={<Profiles />} />
           <Route path="/blogs/post-blog" element={<RestrictRoute><PostBlog /></RestrictRoute>} />
-          <Route path="/addPackage" element={<RestrictRoute><Addpackage /></RestrictRoute>} />
+          <Route path="/posts/package/addPackage" element={<RestrictRoute><Addpackage /></RestrictRoute>} />
           <Route path="/posts/package/organized" element={<RestrictRoute><OrganizedPackages /></RestrictRoute>} />
           <Route path="/posts/package/guides" element={<RestrictRoute><PackageGuides /></RestrictRoute>} />
           <Route path="/posts/package/addOrganizedPackage" element={<RestrictRoute><AddOrganizedPackage /></RestrictRoute>} />
