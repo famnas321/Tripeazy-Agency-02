@@ -105,13 +105,13 @@ export const addLike =  async ({status,packageId})=>{
   throw error.response?error.response.data:error;
  }
 }
-export const PostBookings= async (bookingDatas)=>{
- if(!bookingDatas){
+export const PostBookings= async (bookingData)=>{
+ if(!bookingData){
   console.log("datas are not given for api")
 return
 }
  try{
-  const  response = await axiosInstance.post("packages/postBookings",bookingDatas)
+  const  response = await axiosInstance.post("packages/postBookings",bookingData)
   return response.data
 
  }catch(error){
