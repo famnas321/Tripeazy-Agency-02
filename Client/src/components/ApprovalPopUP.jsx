@@ -68,7 +68,7 @@ const SuccessModal = ({ onClose }) => {
         <h2 className={`text-2xl font-bold mb-3 text-gray-800 transition-all duration-300 delay-100 ${
           isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         }`}>
-          Success Message
+         Booking Placed!
         </h2>
         
         
