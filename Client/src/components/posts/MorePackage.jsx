@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react";
 import { NavLink } from 'react-router-dom';
 
 import ReviewSection from './Reviews';
+import { PostBookings } from 'src/services/authService';
+import SuccessModal from '../ApprovalPopUP';
 
 function MorePackage() {
   const location = useLocation();
@@ -13,9 +15,10 @@ function MorePackage() {
   const [members, setMembers] = useState();
   const [day, setDay] = useState();
   const [night, setNight] = useState();
+  const [date, setDate] = useState();
   const [mobileNumber, setMobileNumber] = useState();
   const [errors, setErrors] = useState({});
-
+  const [showPopup,setShowPopup]= useState(false)
   useEffect(() => {
     if (location.state) {
       setDatas(location.state);
@@ -52,23 +55,31 @@ function MorePackage() {
     setSelectedImage(index);
   };
 
-  const handlebooking = async () => {
+  const handlebooking = async (postId) => {
     if (!validate()) {
       return;  
     }
-    
+    // console.log(postId,"this is post id ")
     const bookingData= {
    members,   
    day,
    night,
    mobileNumber,
-   type:"Package"
+   postId,
+   date,
+   role:"Agency",
+   type:"Package",
+   status:"Pending",
+
     }
+    // console.log("bookingdata is ",bookingData)    
    try{
     const response = await PostBookings(bookingData)
     if(response){
-      console.log(response,"Booked succussfullu")
+      console.log(response,"Booked succussfully")
+      setShowPopup(true)
     }
+   
    }catch(error){
    console.log(error,"error while booking")
    }
@@ -146,6 +157,18 @@ function MorePackage() {
                   />
                   {errors.members && <p className="text-red-500 text-xs">{errors.members}</p>}
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Date</label>
+                  <input
+                    type="date"
+                   
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="pic the data"
+                  />
+                  {/* {errors.members && <p className="text-red-500 text-xs">{errors.members}</p>} */}
+                </div>
                 <div className="flex gap-4">
                   <div className="w-1/2">
                     <label className="block text-sm font-medium text-gray-700">Day</label>
@@ -185,7 +208,7 @@ function MorePackage() {
                 </div>
                 <button
                   className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-                  onClick={handlebooking}
+                  onClick={()=>handlebooking(datas._id)}
                 >
                   Book Now
                 </button>
@@ -207,6 +230,12 @@ function MorePackage() {
       </div>
 
       <ReviewSection />
+      {showPopup && 
+  <SuccessModal
+    onClose={() => setShowPopup(false)}
+  />
+}
+
     </>
   );
 }
