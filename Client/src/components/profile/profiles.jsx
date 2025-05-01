@@ -7,12 +7,14 @@ import { Circles } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import CommonNav from "../navbar/commonNav";
 import axiosInstance from "src/utils/axiosInstance";
+import { NavLink } from "react-router-dom";
 const Profiles = () => {
   const navigate = useNavigate()
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [errors, setErrors] = useState({});
+  
   
   const [Profile, setProfile] = useState({
     companyName: "",
@@ -46,13 +48,18 @@ const Profiles = () => {
   },[image])
 
   const logOut = async () =>{
+    setLoading(true)
     try {
       const response = await axiosInstance.post("/logout");
       if(response.status === 200){
-        navigate("/login")
+        //  navigate("/login")
+         window.location.href = "/login"
+       return
       }
     } catch (error) {
-      
+       console.log(error,"can not logout , there is an error")
+    }finally{
+      setLoading(false)
     }
   }
  
