@@ -57,7 +57,8 @@ exports.addPackages = async (req,res)=>{
 
 exports.fetchPackages = async (req, res) => {
   try {
-    const id =req.user.id
+    const agencyId =req.user.id
+    // console.log(agencyId,"this is agency id from fetch packages")
     const page = parseInt(req.query.page) || 1;  
     const limit = parseInt(req.query.limit) || 4; 
     const {searchQuery,catagory}=req.query
@@ -69,7 +70,9 @@ exports.fetchPackages = async (req, res) => {
     if (catagory !== "All") {
       query.destinationCategory = new RegExp(catagory, "i");
     }
-    
+    if(agencyId){
+    query.agencyId=agencyId
+    }
     if(searchQuery){
       const regExp= new RegExp(searchQuery,"i")
       query.$or=[
@@ -84,7 +87,7 @@ exports.fetchPackages = async (req, res) => {
       .find(query) 
       .skip(skip)
       .limit(limit)
-      .populate("agencyId");
+       .populate("agencyId");
 
     const totalCount = await packageModel.countDocuments();
    if(fetchedAgency.length === 0){
