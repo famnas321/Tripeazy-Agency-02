@@ -24,6 +24,8 @@ import OganizedMore from './components/posts/OganizedMore'
 import MorePackage from './components/posts/MorePackage'
 import RestrictRoute from './components/RestrictRoute'
 import PrivateRoute from './components/PrivateRoute'
+import NoAccessPage from './Additional/NoAccessPage'
+
 import { authUser } from './services/authService'
 import { setUserInfo } from './redux/reducers/authSlices'
 import { ScaleLoader } from 'react-spinners'
@@ -89,6 +91,7 @@ function App() {
           <Route path="/blogs/:id" element={<RestrictRoute><Blogshow /></RestrictRoute>} />
           <Route path="/posts/oganized/more" element={<RestrictRoute><OganizedMore /></RestrictRoute>} />
           <Route path="/posts/package/more" element={<RestrictRoute><MorePackage /></RestrictRoute>} />
+          <Route path="/noAccess" element={<RestrictRoute><NoAccessPage /></RestrictRoute>} />
 
         </Route>
 

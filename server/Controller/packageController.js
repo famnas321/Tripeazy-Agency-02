@@ -13,9 +13,16 @@ exports.addPackages = async (req,res)=>{
    const file = req.files
    
    const agencyId= req.user.id
- 
-     
+  
      try{
+
+      // const agency=  await Agency.find({agencyId})
+      // console.log(agency)
+      //   if(agency.status!=="Accepted"){
+      //    res.status(401).json({message:"You have no Access to Add Package! Wait Until Admin is Accept Your Request"})
+      //    return
+      //   }
+
        const newPackage = new packageModel({
          companyDescription,
          destination,

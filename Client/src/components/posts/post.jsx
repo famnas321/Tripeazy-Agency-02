@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Skeletoncom from "../Skeleton";
 import Like from "src/Additional/Like";
 import SaveToggle from "src/Additional/Save";
+import { useSelector } from "react-redux";
 
 const tabs = [
   { name: "Packages", path: "/posts" },
@@ -23,6 +24,9 @@ const sliderSettings = {
 };
 
 const Navigation = () => {
+  
+  const hasAccess= useSelector((state) => state.auth.userInfo);
+  // console.log(hasAccess.status,"this is access from post")
   const [loading, setLoading] = useState(false);
   const [fetchedData, setFetchedData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -128,6 +132,12 @@ const Navigation = () => {
     { destinationCategory: "Adventure" },
   ];
   console.log(fetchedData,"this is fetched data")
+
+  const addPackage =()=>{
+      if(hasAccess.status=== "Accepted"){
+        navigate("/posts/package/addPackage")
+      }
+  }
   return (
     <div className="w-full ">
       <div className= "flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky -top-1 z-50">
@@ -263,12 +273,12 @@ const Navigation = () => {
       <div style={{ height: "100px" }}></div>
 
       <div className="fixed bottom-5 right-5">
-        <NavLink
-          to="/posts/package/addPackage"
+        <button
+           onClick={addPackage}
           className="bg-blue-500 text-white text-3xl w-16 h-16 flex items-center justify-center rotate-45 rounded-3xl"
         >
           ×
-        </NavLink>
+        </button>
       </div>
     </div>
   );
