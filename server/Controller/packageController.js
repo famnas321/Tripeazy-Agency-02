@@ -167,3 +167,22 @@ exports.updateLike = async (req, res) => {
   }
 };
 
+exports.deletePackage = async (req,res)=>{
+
+ const packageId =req.query.id
+//  console.log(packageId ,"id for delete")
+ try{
+   const response = await packageModel.deleteOne({_id:packageId})
+   if(response.deletedCount ===0){
+    res.status(401).json({message:"Package is not found"})
+    return
+   }
+
+   res.status(200).json({message:"Package Deleted Successfully", response})
+ }catch(error){
+  res.status(500).json({errorMessge:"error occured while package deleting",error})
+  console.log(error)
+
+ }
+
+}

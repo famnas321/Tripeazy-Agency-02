@@ -119,3 +119,12 @@ return
  }
 
 }
+export const deletePackage = async (packageId) => {
+  try {
+    console.log(packageId,"api is stating to go")
+    const response = await axiosInstance.delete(`packages/deletePackage?id=${packageId}`);
+    return response;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
