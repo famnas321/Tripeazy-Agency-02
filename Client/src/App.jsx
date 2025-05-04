@@ -25,6 +25,7 @@ import MorePackage from './components/posts/MorePackage'
 import RestrictRoute from './components/RestrictRoute'
 import PrivateRoute from './components/PrivateRoute'
 import NoAccessPage from './Additional/NoAccessPage'
+import DeleteSuccessPage from './components/posts/DeleteSuccession'
 
 import { authUser } from './services/authService'
 import { setUserInfo } from './redux/reducers/authSlices'
@@ -92,6 +93,7 @@ function App() {
           <Route path="/posts/oganized/more" element={<RestrictRoute><OganizedMore /></RestrictRoute>} />
           <Route path="/posts/package/more" element={<RestrictRoute><MorePackage /></RestrictRoute>} />
           <Route path="/noAccess" element={<RestrictRoute><NoAccessPage /></RestrictRoute>} />
+          <Route path="/posts/deleteSuccession" element={<RestrictRoute><DeleteSuccessPage /></RestrictRoute>} />
 
         </Route>
 

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from "lucide-react";
 import { NavLink } from 'react-router-dom';
 
+import DeletePackage from './DeletePackage';
 import CrudPopUp from 'src/Additional/CrudPopUp';
 import ReviewSection from './Reviews';
 import { PostBookings } from 'src/services/authService';
 import SuccessModal from '../ApprovalPopUP';
 import { deletePackage } from 'src/services/authService';
+import toast from 'react-hot-toast';
 function MorePackage() {
+  const navigate= useNavigate()
   const location = useLocation();
   const [selectedImage, setSelectedImage] = useState(0);
   const [datas, setDatas] = useState(null);
@@ -21,6 +24,8 @@ function MorePackage() {
   const [errors, setErrors] = useState({});
   const [showPopup,setShowPopup]= useState(false)
   const[crudPopup,setCrudPopup]=useState(false)
+  const [showDeletePop,setShowDeletePop] =useState(false)
+  const [selectedPackageId,setSelectedPackageId]= useState()
   useEffect(() => {
     if (location.state) {
       setDatas(location.state);
@@ -86,16 +91,30 @@ function MorePackage() {
   //  console.log(error,"error while booking")
   //  }
   // };
-const handleAction = async (type,packageId)=>{
+const handleAction =  (type,packageId)=>{
   console.log(type,"this is action type")
   console.log(packageId,"this is id of the post ")
-
   if(type==="delete"){
-     const response=  await deletePackage(packageId) 
-    console.log(response,"this is reponse for the delete")
-  }
+    setShowDeletePop(true)
+    setSelectedPackageId(packageId)
+  } 
 }
 
+const handleDelete = async ()=>{
+      
+      const packageId= selectedPackageId
+      console.log(packageId,"this is selected package id ")
+      try{
+       const response= await deletePackage(packageId)
+       console.log(response)
+       if(response){
+        navigate("/posts/deleteSuccession")
+       }
+      }catch(error){
+       console.log(error)
+       toast.error("An Error occured")
+      }
+}
   return (
     <>
       <nav className="h-16 shadow-md bg-white sticky top-0 z-50 flex items-center justify-between px-4">
@@ -251,6 +270,14 @@ const handleAction = async (type,packageId)=>{
     onClose={() => setShowPopup(false)}
   />
 }
+{showDeletePop && (
+  <DeletePackage
+    isOpen={showDeletePop}
+    onClose={() => setShowDeletePop(false)}
+    onDelete={handleDelete}
+  />
+)}
+
 
     </>
   );
