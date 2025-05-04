@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from "lucide-react";
 import { NavLink } from 'react-router-dom';
 
+import EditPackage from './EditPackage';
 import DeletePackage from './DeletePackage';
 import CrudPopUp from 'src/Additional/CrudPopUp';
 import ReviewSection from './Reviews';
@@ -26,6 +27,7 @@ function MorePackage() {
   const[crudPopup,setCrudPopup]=useState(false)
   const [showDeletePop,setShowDeletePop] =useState(false)
   const [selectedPackageId,setSelectedPackageId]= useState()
+  const [showEditPopup,setShowEditPopup]= useState(false)
   useEffect(() => {
     if (location.state) {
       setDatas(location.state);
@@ -97,7 +99,11 @@ const handleAction =  (type,packageId)=>{
   if(type==="delete"){
     setShowDeletePop(true)
     setSelectedPackageId(packageId)
+    return
   } 
+  if(type=== "edit"){
+  setShowEditPopup(true)
+  }
 }
 
 const handleDelete = async ()=>{
@@ -277,6 +283,10 @@ const handleDelete = async ()=>{
     onDelete={handleDelete}
   />
 )}
+  <EditPackage
+        isOpen={showEditPopup}
+        onClose={() => setShowEditPopup(false)}
+      />
 
 
     </>

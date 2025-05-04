@@ -5,13 +5,13 @@ const DeleteSuccessPage = () => {
   const checkmarkRef = useRef(null);
 
   useEffect(() => {
-    // Animate the checkmark when component mounts
+    
     const checkmark = checkmarkRef.current;
     if (checkmark) {
       checkmark.style.transform = 'scale(0)';
       checkmark.style.transition = 'none';
       
-      // Trigger the animation after a small delay
+     
       setTimeout(() => {
         checkmark.style.transition = 'transform 0.6s ease-in-out';
         checkmark.style.transform = 'scale(1)';
@@ -30,7 +30,7 @@ const DeleteSuccessPage = () => {
             opacity: 0.9,
           }}
         />
-        {/* Animated checkmark path */}
+        
         <svg
           className="absolute top-0 left-0 h-16 w-16"
           viewBox="0 0 24 24"
