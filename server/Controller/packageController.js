@@ -5,7 +5,7 @@ const {imageUpload} = require("./arrayImageUpload")
 exports.addPackages = async (req,res)=>{
   
    const {companyDescription,destination,destinationCategory,adult,minor,phoneCode,mobileNumber,currency,payment,packageDescription,type} = req.body
-   // const AgencyId= req.user._id
+    // const AgencyId= req.user.id
   
     console.log(type ,"this is type ")
   //  console.log(req.files)
@@ -13,15 +13,17 @@ exports.addPackages = async (req,res)=>{
    const file = req.files
    
    const agencyId= req.user.id
+   console.log(agencyId,"this is agency id")
   
      try{
 
-      // const agency=  await Agency.find({agencyId})
-      // console.log(agency)
-      //   if(agency.status!=="Accepted"){
-      //    res.status(401).json({message:"You have no Access to Add Package! Wait Until Admin is Accept Your Request"})
-      //    return
-      //   }
+      const agency = await Agency.findById(agencyId);
+
+      console.log(agency.status,"this is agency status")
+        if(agency.status!=="Accepted"){
+         res.status(401).json({message:"You have no Access to Add Package! Wait Until Admin is Accept Your Request"})
+         return
+        }
 
        const newPackage = new packageModel({
          companyDescription,
@@ -38,7 +40,7 @@ exports.addPackages = async (req,res)=>{
 
        })
        console.log("just above of the saving")
-       console.log(newPackage)
+      //  console.log(newPackage)
        await newPackage.save()
        const userId= newPackage._id
        if(req.files){

@@ -174,6 +174,7 @@ function Addpackage() {
     }
    }catch(error){
       console.error(error, "error occured while recieving")
+      setIsProcessing(false)
    }
    
  }
@@ -421,6 +422,7 @@ function Addpackage() {
   />
    {errors.packageDescription&& <p className="text-red-500">{errors.packageDescription}</p>}
  <PackageImage onChange={(file,key)=>setImages((prev)=>({...prev ,[key]:file}))}/>
+ {errors.images && <p className="text-red-500">{errors.images}</p>}
 <button 
   type="submit"
   className="mt-3 bg-blue-700 backdrop-blur-lg text-white font-medium py-2 px-6 rounded-lg border border-white/30 shadow-md hover:bg-purple-700 transition 
