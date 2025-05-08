@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Skeletoncom from "../Skeleton";
 import Like from "src/Additional/Like";
 import SaveToggle from "src/Additional/Save";
+
 import { useSelector } from "react-redux";
 
 const tabs = [
@@ -245,10 +246,11 @@ const Navigation = () => {
                     <Like 
                           packageId={post._id}
                           like={post.likeCount}
+                          likeCount={post.likeCount}
                           likedBy={post.likedBy}
                           onToggle={() => setLikeToggle(prev => !prev)}
                         />
-                      <p>{post.likeCount}</p>
+                     
                       <SaveToggle />
                     </div>
                   </div>

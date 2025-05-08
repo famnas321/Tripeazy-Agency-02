@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { addLike } from "src/services/authService";
 import { useSelector } from "react-redux";
 
-const Like = ({ packageId, like, likedBy, onToggle }) => {
+const Like = ({ packageId, like, likedBy, onToggle,likeCount }) => {
+  const [countOfLike, setCountOfLike]= useState(likeCount)
   const authData = useSelector((state) => state.auth.userInfo);
   const [localHasLiked, setLocalHasLiked] = useState(false);
   const filled = "#000000";
@@ -14,18 +15,25 @@ const Like = ({ packageId, like, likedBy, onToggle }) => {
     setLocalHasLiked(serverHasLiked);
   }, [likedBy, authData._id]);
   
-  
-  console.log(localHasLiked,"this is just below of the useEffect")
+ 
+  // console.log(localHasLiked,"this is just below of the useEffect")
   const handletoggle = async () => {
    const newStatus = !localHasLiked;
     setLocalHasLiked(newStatus);
     
     try {
       
-      await addLike({ status: newStatus, packageId });
+      const response=  await addLike({ status: newStatus, packageId });
+      console.log(response.message,"this is the liked response")
       
+      if(response.message === "Liked"){
+        setLocalHasLiked(true)
+       setCountOfLike(countOfLike+1)
+      }else{
+        setLocalHasLiked(false)
+        setCountOfLike(countOfLike-1)
+      }
       
-      onToggle();
     } catch (error) {
       console.error("Like API Error:", error);
      
@@ -34,6 +42,7 @@ const Like = ({ packageId, like, likedBy, onToggle }) => {
   };
 
   return (
+    <>
     <svg
       fill={localHasLiked ? filled : "none"}
       stroke={filled}
@@ -51,6 +60,8 @@ const Like = ({ packageId, like, likedBy, onToggle }) => {
         strokeWidth={1.5}
       />
     </svg>
+     <p>{countOfLike}</p>
+     </>
   );
 };
 
