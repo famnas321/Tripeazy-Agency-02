@@ -121,6 +121,7 @@ const handleDelete = async ()=>{
        toast.error("An Error occured")
       }
 }
+// console.log(datas,"this is datas for aligning")
   return (
     <>
       <nav className="h-16 shadow-md bg-white sticky top-0 z-50 flex items-center justify-between px-4">
@@ -285,6 +286,7 @@ const handleDelete = async ()=>{
 )}
   <EditPackage
         isOpen={showEditPopup}
+        datas={datas}
         onClose={() => setShowEditPopup(false)}
       />
 

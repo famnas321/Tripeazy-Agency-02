@@ -1,11 +1,9 @@
+import { form } from "@heroui/theme";
 import React, { useState } from "react";
 
-const EditPackage = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
-
+const EditPackage = ({ isOpen, onClose,datas }) => {
+  const [formData, setFormData] = useState(datas);
+  // console.log(formData,"this data is from ed")
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -23,11 +21,12 @@ const EditPackage = ({ isOpen, onClose }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-80">
         <h2 className="text-xl font-bold mb-4">Enter Details</h2>
         <form onSubmit={handleSubmit}>
-          <input
+          <label htmlFor="">Package Description</label>
+          <textarea
             type="text"
             name="name"
-            placeholder="Name"
-            value={formData.name}
+            
+            value={formData.packageDescription}
             onChange={handleChange}
             className="w-full px-3 py-2 mb-3 border rounded"
             required
@@ -45,6 +44,7 @@ const EditPackage = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={onClose}
+              
               className="px-3 py-2 bg-gray-300 rounded hover:bg-gray-400"
             >
               Cancel
