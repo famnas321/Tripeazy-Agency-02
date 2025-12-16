@@ -53,7 +53,7 @@ const Profiles = () => {
       const response = await axiosInstance.post("/logout");
       if(response.status === 200){
         //  navigate("/login")
-         window.location.href = "/login"
+          window.location.href = "/login"
        return
       }
     } catch (error) {

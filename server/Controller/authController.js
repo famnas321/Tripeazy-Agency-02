@@ -91,7 +91,7 @@ const authenticatedUser=  async(req,res)=>{
    }
    catch(error){
    console.log(error)
-   res.send(500).json({error:" error occured while authentication of the user",error})
+   res.status(500).json({error:" error occured while authentication of the user",error})
    }
 }
 

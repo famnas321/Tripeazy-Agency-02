@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 // import './App.css'
 import SignIn from './accounts/SignIn'
 import Pending from "./accounts/Pending"
@@ -24,10 +26,15 @@ import OganizedMore from './components/posts/OganizedMore'
 import MorePackage from './components/posts/MorePackage'
 import RestrictRoute from './components/RestrictRoute'
 import PrivateRoute from './components/PrivateRoute'
+import NoAccessPage from './Additional/NoAccessPage'
+import DeleteSuccessPage from './components/posts/DeleteSuccession'
+import PremiumWelcomePage from "./Additional/PremiumWelcomePage"
+
 import { authUser } from './services/authService'
 import { setUserInfo } from './redux/reducers/authSlices'
 import { ScaleLoader } from 'react-spinners'
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function App() {
   const [loading, setLoading] = useState(false)
@@ -79,7 +86,7 @@ function App() {
           <Route path='blogs' element={<RestrictRoute><Blog /></RestrictRoute>} />
           <Route path='messages' element={<RestrictRoute><Messages /></RestrictRoute>} />
           <Route path='contact-us' element={<RestrictRoute><Contact /></RestrictRoute>} />
-          <Route path='advertisments' element={<RestrictRoute><Addvertisment /></RestrictRoute>} />
+          <Route path="advertisments" element={   <RestrictRoute>  <Elements stripe={stripePromise}>    <Addvertisment />  </Elements></RestrictRoute> }/>
           <Route path='profile' element={<RestrictRoute><Profiles/></RestrictRoute>} />
           <Route path="/blogs/post-blog" element={<RestrictRoute><PostBlog /></RestrictRoute>} />
           <Route path="/posts/package/addPackage" element={<RestrictRoute><Addpackage /></RestrictRoute>} />
@@ -89,6 +96,9 @@ function App() {
           <Route path="/blogs/:id" element={<RestrictRoute><Blogshow /></RestrictRoute>} />
           <Route path="/posts/oganized/more" element={<RestrictRoute><OganizedMore /></RestrictRoute>} />
           <Route path="/posts/package/more" element={<RestrictRoute><MorePackage /></RestrictRoute>} />
+          <Route path="/noAccess" element={<RestrictRoute><NoAccessPage /></RestrictRoute>} />
+          <Route path="/posts/deleteSuccession" element={<RestrictRoute><DeleteSuccessPage /></RestrictRoute>} />
+          <Route path="/PremiumWelcomePage" element={<PremiumWelcomePage />} />
 
         </Route>
 

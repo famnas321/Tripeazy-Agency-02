@@ -45,6 +45,22 @@ const AgencySchema = new mongoose.Schema({
     type: String,  
     default: null,   
   },
+  subscriptionStatus: {
+    type: String,
+    enum: ["active", "inactive", "expired"],
+    default: "inactive",
+  },
+  subscriptionPlan: {
+    type: String,
+    enum: ["standard", "premium",], 
+    default: null,
+  },
+  expiresAt: {
+    type: Date,
+    default: null,
+  },
+
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("Agency", AgencySchema);

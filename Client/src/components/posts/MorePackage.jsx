@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from "lucide-react";
 import { NavLink } from 'react-router-dom';
 
+import EditPackage from './EditPackage';
+import DeletePackage from './DeletePackage';
+import CrudPopUp from 'src/Additional/CrudPopUp';
 import ReviewSection from './Reviews';
 import { PostBookings } from 'src/services/authService';
 import SuccessModal from '../ApprovalPopUP';
-
+import { deletePackage } from 'src/services/authService';
+import toast from 'react-hot-toast';
 function MorePackage() {
+  const navigate= useNavigate()
   const location = useLocation();
   const [selectedImage, setSelectedImage] = useState(0);
   const [datas, setDatas] = useState(null);
   const [images, setImages] = useState([]);
-  const [members, setMembers] = useState();
-  const [day, setDay] = useState();
-  const [night, setNight] = useState();
-  const [date, setDate] = useState();
-  const [mobileNumber, setMobileNumber] = useState();
+  // const [members, setMembers] = useState();
+  // const [day, setDay] = useState();
+  // const [night, setNight] = useState();
+  // const [date, setDate] = useState();
+  // const [mobileNumber, setMobileNumber] = useState();
   const [errors, setErrors] = useState({});
   const [showPopup,setShowPopup]= useState(false)
+  const[crudPopup,setCrudPopup]=useState(false)
+  const [showDeletePop,setShowDeletePop] =useState(false)
+  const [selectedPackageId,setSelectedPackageId]= useState()
+  const [showEditPopup,setShowEditPopup]= useState(false)
   useEffect(() => {
     if (location.state) {
       setDatas(location.state);
@@ -30,62 +39,89 @@ function MorePackage() {
     return <div>Loading...</div>;
   }
 
-  const validate = () => {
-    let errors = {};
+  // const validate = () => {
+  //   let errors = {};
 
-    if (!members) {
-      errors.members = "*Please enter members";
-    }
+  //   if (!members) {
+  //     errors.members = "*Please enter members";
+  //   }
 
-    if (!mobileNumber) {
-      errors.mobileNumber = "*Mobile number required";
-    } else if (mobileNumber.length !== 10 || !/^\d+$/.test(mobileNumber)) {
-      errors.mobileNumber = "*Mobile number must be 10 characters";
-    }
+  //   if (!mobileNumber) {
+  //     errors.mobileNumber = "*Mobile number required";
+  //   } else if (mobileNumber.length !== 10 || !/^\d+$/.test(mobileNumber)) {
+  //     errors.mobileNumber = "*Mobile number must be 10 characters";
+  //   }
 
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors);
-      return false;  
-    }
-    setErrors({});
-    return true;  
-  };
+  //   if (Object.keys(errors).length > 0) {
+  //     setErrors(errors);
+  //     return false;  
+  //   }
+  //   setErrors({});
+  //   return true;  
+  // };
 
   const handleImageClick = (index) => {
     setSelectedImage(index);
   };
 
-  const handlebooking = async (postId) => {
-    if (!validate()) {
-      return;  
-    }
-    // console.log(postId,"this is post id ")
-    const bookingData= {
-   members,   
-   day,
-   night,
-   mobileNumber,
-   postId,
-   date,
-   role:"Agency",
-   type:"Package",
-   status:"Pending",
+  // const handlebooking = async (postId) => {
+  //   if (!validate()) {
+  //     return;  
+  //   }
+  //   // console.log(postId,"this is post id ")
+  //   const bookingData= {
+  //  members,   
+  //  day,
+  //  night,
+  //  mobileNumber,
+  //  postId,
+  //  date,
+  //  role:"Agency",
+  //  type:"Package",
+  //  status:"Pending",
 
-    }
-    // console.log("bookingdata is ",bookingData)    
-   try{
-    const response = await PostBookings(bookingData)
-    if(response){
-      console.log(response,"Booked succussfully")
-      setShowPopup(true)
-    }
+  //   }
+  //   // console.log("bookingdata is ",bookingData)    
+  //  try{
+  //   const response = await PostBookings(bookingData)
+  //   if(response){
+  //     console.log(response,"Booked succussfully")
+  //     setShowPopup(true)
+  //   }
    
-   }catch(error){
-   console.log(error,"error while booking")
-   }
-  };
+  //  }catch(error){
+  //  console.log(error,"error while booking")
+  //  }
+  // };
+const handleAction =  (type,packageId)=>{
+  console.log(type,"this is action type")
+  console.log(packageId,"this is id of the post ")
+  if(type==="delete"){
+    setShowDeletePop(true)
+    setSelectedPackageId(packageId)
+    return
+  } 
+  if(type=== "edit"){
+  setShowEditPopup(true)
+  }
+}
 
-
+const handleDelete = async ()=>{
+      
+      const packageId= selectedPackageId
+      console.log(packageId,"this is selected package id ")
+      try{
+       const response= await deletePackage(packageId)
+       console.log(response)
+       if(response){
+        navigate("/posts/deleteSuccession")
+       }
+      }catch(error){
+       console.log(error)
+       toast.error("An Error occured")
+      }
+}
+// console.log(datas,"this is datas for aligning")
   return (
     <>
       <nav className="h-16 shadow-md bg-white sticky top-0 z-50 flex items-center justify-between px-4">
@@ -110,7 +146,7 @@ function MorePackage() {
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2 p-4">
             <img
-              src={images[selectedImage]}
+              src={images[selectedImage].url}
               alt="Selected"
               className="w-full h-auto rounded-lg shadow-lg"
             />
@@ -118,7 +154,7 @@ function MorePackage() {
               {images.map((img, index) => (
                 <img
                   key={index}
-                  src={img}
+                  src={img.url}
                   alt={`Thumbnail ${index + 1}`}
                   className={`w-24 h-16 cursor-pointer rounded-lg shadow-lg ${
                     index === selectedImage ? 'border-2 border-blue-500' : ''
@@ -134,6 +170,11 @@ function MorePackage() {
           </div>
 
           <div className="w-full md:w-1/2 p-4">
+          {/* <p className='text-right text-4xl mr-5'>...</p> */}
+          <div className='flex justify-end'>
+          <CrudPopUp onAction={(type)=>handleAction(type,datas._id)}/>
+          </div>
+          
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-bold mb-4 uppercase text-amber-500">{datas.agencyId.companyName} company</h2>
               <h1 className="text-lg uppercase">to {datas.destination}</h1>
@@ -145,7 +186,7 @@ function MorePackage() {
                   <p className="mt-1 text-lg font-semibold">${datas.payment}</p>
                   <p className="text-gray-600 text-xs">The price may change based on your requirements</p>
                 </div>
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700">Number of Members</label>
                   <input
                     type="number"
@@ -156,8 +197,8 @@ function MorePackage() {
                     placeholder="Enter number of members"
                   />
                   {errors.members && <p className="text-red-500 text-xs">{errors.members}</p>}
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700">Date</label>
                   <input
                     type="date"
@@ -167,9 +208,9 @@ function MorePackage() {
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     placeholder="pic the data"
                   />
-                  {/* {errors.members && <p className="text-red-500 text-xs">{errors.members}</p>} */}
-                </div>
-                <div className="flex gap-4">
+                  
+                </div> */}
+                {/* <div className="flex gap-4">
                   <div className="w-1/2">
                     <label className="block text-sm font-medium text-gray-700">Day</label>
                     <input
@@ -211,7 +252,8 @@ function MorePackage() {
                   onClick={()=>handlebooking(datas._id)}
                 >
                   Book Now
-                </button>
+                </button> */}
+              
               </div>
             </div>
           </div>
@@ -235,6 +277,26 @@ function MorePackage() {
     onClose={() => setShowPopup(false)}
   />
 }
+{showDeletePop && (
+  <DeletePackage
+    isOpen={showDeletePop}
+    onClose={() => setShowDeletePop(false)}
+    onDelete={handleDelete}
+  />
+)}
+  <EditPackage
+  isOpen={showEditPopup}
+  datas={datas}
+  onClose={(updatedData) => {
+    setShowEditPopup(false);
+    if (updatedData) {
+      setDatas(updatedData)
+      setImages(updatedData.images); 
+    }
+  }}
+/>
+
+
 
     </>
   );
