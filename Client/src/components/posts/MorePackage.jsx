@@ -146,7 +146,7 @@ const handleDelete = async ()=>{
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2 p-4">
             <img
-              src={images[selectedImage]}
+              src={images[selectedImage].url}
               alt="Selected"
               className="w-full h-auto rounded-lg shadow-lg"
             />
@@ -154,7 +154,7 @@ const handleDelete = async ()=>{
               {images.map((img, index) => (
                 <img
                   key={index}
-                  src={img}
+                  src={img.url}
                   alt={`Thumbnail ${index + 1}`}
                   className={`w-24 h-16 cursor-pointer rounded-lg shadow-lg ${
                     index === selectedImage ? 'border-2 border-blue-500' : ''
@@ -285,10 +285,17 @@ const handleDelete = async ()=>{
   />
 )}
   <EditPackage
-        isOpen={showEditPopup}
-        datas={datas}
-        onClose={() => setShowEditPopup(false)}
-      />
+  isOpen={showEditPopup}
+  datas={datas}
+  onClose={(updatedData) => {
+    setShowEditPopup(false);
+    if (updatedData) {
+      setDatas(updatedData)
+      setImages(updatedData.images); 
+    }
+  }}
+/>
+
 
 
     </>

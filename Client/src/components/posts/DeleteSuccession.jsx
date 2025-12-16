@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
+
 
 const DeleteSuccessPage = () => {
+   const navigate= useNavigate()
   const checkmarkRef = useRef(null);
 
   useEffect(() => {
@@ -18,6 +21,9 @@ const DeleteSuccessPage = () => {
       }, 50);
     }
   }, []);
+   const handlePost = ()=>{
+     navigate(-2)
+   }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-center px-4">
@@ -31,7 +37,7 @@ const DeleteSuccessPage = () => {
           }}
         />
         
-        <svg
+        {/* <svg
           className="absolute top-0 left-0 h-16 w-16"
           viewBox="0 0 24 24"
           fill="none"
@@ -49,18 +55,25 @@ const DeleteSuccessPage = () => {
               animationDelay: '0.3s'
             }}
           />
-        </svg>
+        </svg> */}
       </div>
       <h1 className="text-2xl font-semibold text-gray-800">
         Your Package was successfully deleted.
       </h1>
       <p className="text-gray-600 mt-2">You can now safely return to the post page or continue browsing.</p>
-      <a
+      {/* <a
         href="/posts"
         className="mt-6 inline-block bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition"
       >
         Go to posts
-      </a>
+      </a> */}
+      <button
+      className="mt-6 inline-block bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition"
+      onClick={handlePost}
+      >
+         Go to posts
+      </button>
+    
 
       <style jsx>{`
         @keyframes draw {

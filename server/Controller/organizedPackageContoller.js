@@ -46,7 +46,7 @@ exports.addOrganizedPackage = async(req,res)=>{
      await newOrganizedPackage.save()
      const id =newOrganizedPackage._id
      
-    const imageResponse=  await imageUpload(file,id,type)
+    const imageResponse=  await imageUpload(file,id,type,true)
               if(imageResponse.status ===200){
                 const imageUrl=imageResponse.imageUrl
               }else{

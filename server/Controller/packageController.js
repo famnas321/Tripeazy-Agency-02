@@ -1,6 +1,6 @@
 const packageModel = require("../model/PackageModel")
 const Agency = require("../model/AgencyModel")
-const {imageUpload} = require("./arrayImageUpload")
+const {imageUpload,deleteImage} = require("./arrayImageUpload")
 
 exports.addPackages = async (req,res)=>{
   
@@ -11,7 +11,7 @@ exports.addPackages = async (req,res)=>{
   //  console.log(req.files)
    console.log(req.user.id)
    const file = req.files
-   
+   console.log(file,"this file from add package")
    const agencyId= req.user.id
    console.log(agencyId,"this is agency id")
   
@@ -45,7 +45,7 @@ exports.addPackages = async (req,res)=>{
        const userId= newPackage._id
        if(req.files){
         
-        const imageResponse=  await imageUpload(file,userId,type)
+        const imageResponse=  await imageUpload(file,userId,type,true)
           if(imageResponse.status ===200){
             const imageUrl=imageResponse.imageUrl
           }else{
@@ -188,3 +188,47 @@ exports.deletePackage = async (req,res)=>{
  }
 
 }
+
+
+exports.editPackage = async (req, res) => {
+  const { payment, packageDescription, packageId, removedIndex, type } = req.body;
+  const file = req.files;
+  let deletion;
+
+  try {
+    
+    await packageModel.findByIdAndUpdate(
+      packageId,
+      { packageDescription, payment },
+      { new: true }
+    );
+
+   
+    if (removedIndex && removedIndex.length > 0) {
+      deletion = await deleteImage(packageId, removedIndex);
+      console.log(deletion, "from controller");
+
+      if (deletion?.status === 200) {
+        if (file && file.length > 0) {
+          await imageUpload(file, packageId, type, false);
+        } else {
+          return res.status(400).json({
+            message: "Images required after deletion but none provided",
+          });
+        }
+      }
+    }
+
+   
+    const finalPackage = await packageModel.findById(packageId);
+
+    res.status(200).json({
+      message: "package edited successfully",
+      package: finalPackage,
+    });
+
+  } catch (error) {
+    console.log(error, "error on edit package");
+    res.status(500).json({ message: "error occurred while editing package", error });
+  }
+};

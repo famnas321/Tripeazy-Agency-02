@@ -198,7 +198,9 @@ const Navigation = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
+        
+        >
           {fetchedData.map((post, index) => {
             const isLastItem = fetchedData.length === index + 1;
             return (
@@ -206,13 +208,14 @@ const Navigation = () => {
                 key={post._id}
                 ref={isLastItem ? lastItemRef : null}
                 className="w-full bg-white rounded-lg shadow-md overflow-hidden transition-all duration-500 ease-in-out hover:shadow-xl hover:-translate-y-1"
+                onClick={() => handleNavigation(post._id)}
               >
                 {post.images && (
                   <Slider {...sliderSettings}>
                     {post.images.map((img, i) => (
                       <div key={i}>
                         <img
-                          src={img}
+                          src={img.url}
                           alt={`Post ${i + 1}`}
                           className="w-full h-40 object-cover"
                         />

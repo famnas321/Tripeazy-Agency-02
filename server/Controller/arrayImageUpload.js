@@ -2,13 +2,13 @@ const cloudinary = require("../config/cloudinary");
 const packageModel = require("../model/PackageModel");
 const organizedPackage= require("../model/organizedPackage")
 
-exports.imageUpload = async (files, userId, type) => {
-    console.log(files,"this is fro")
+exports.imageUpload = async (files, userId, type,replace) => {
+    console.log(files,userId,type,"this is from image upload")
     try {
         if (!files || files.length === 0) {
             return { status: 400, message: "No files uploaded" };
         }
-
+       
         const folderMap = {
             profile: "profile-images",
             blog: "blogs",
@@ -18,7 +18,7 @@ exports.imageUpload = async (files, userId, type) => {
 
         const folder = folderMap[type] || "default-images";
 
-        // 🔥 Upload each image in parallel and store their URLs
+        
         const uploadedImages = await Promise.all(
             files.map((file) =>
                 new Promise((resolve, reject) => {
@@ -26,7 +26,10 @@ exports.imageUpload = async (files, userId, type) => {
                         { folder },
                         (error, result) => {
                             if (error) reject(error);
-                            else resolve(result.secure_url);
+                            else resolve({
+                                url: result.secure_url,
+                                public_id: result.public_id
+                            });;
                         }
                     ).end(file.buffer);
                 })
@@ -34,11 +37,13 @@ exports.imageUpload = async (files, userId, type) => {
         );
 
         console.log("Images uploaded successfully:", uploadedImages);
+        const query= replace? { $set: { images: uploadedImages } } 
+      : { $push: { images: { $each: uploadedImages } } };
 
         if (type === "package") {
             await packageModel.findByIdAndUpdate(
                 userId,
-                { $set: {images:uploadedImages}}, // Store an array of image URLs
+                query, 
                 { new: true }
             );
         }
@@ -46,7 +51,7 @@ exports.imageUpload = async (files, userId, type) => {
         if (type === "Organized Package") {
             await organizedPackage.findByIdAndUpdate(
                 userId,
-                { $set: {images:uploadedImages}}, // Store an array of image URLs
+               query, 
                 { new: true }
             );
         }
@@ -56,4 +61,43 @@ exports.imageUpload = async (files, userId, type) => {
         console.error("Error uploading images:", error);
         return { status: 500, message: "Server error" };
     }
+};
+
+
+
+exports.deleteImage = async (packageId, indices) => {
+  try {
+    const pkg = await packageModel.findById(packageId);
+    if (!pkg) {
+      throw new Error("Package not found");
+    }
+
+   
+    if (!Array.isArray(indices)) {
+      indices = [indices];
+    }
+
+   
+    indices.sort((a, b) => b - a);
+
+    for (const index of indices) {
+      const imageToDelete = pkg.images[index];
+      if (!imageToDelete) continue;
+
+     
+      await cloudinary.uploader.destroy(imageToDelete.public_id);
+
+      
+      pkg.images.splice(index, 1);
+    }
+
+    
+    await pkg.save();
+
+    console.log("images deleted successfully");
+    return { status: 200, message: "Images deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting images:", error);
+    return { status: 500, message: "Failed to delete images" };
+  }
 };

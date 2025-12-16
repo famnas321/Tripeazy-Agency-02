@@ -140,7 +140,7 @@ function Addpackage() {
     
   }
  
-  const formData = new FormData()
+  const formData = new FormData() 
   console.log("FormData before appending:");
   imageArray.forEach((file) => {
     formData.append("image",file)
@@ -400,7 +400,7 @@ function Addpackage() {
       name='payment'
     value={fields.payment}
       className="flex-1 border border-gray-300 p-2 rounded"
-      placeholder="Enter phone number"
+      
       onChange={handleChange}
     />
      {errors.payment && <p className="text-red-500">{errors.payment}</p>}
