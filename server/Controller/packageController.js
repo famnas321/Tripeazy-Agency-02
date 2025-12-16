@@ -1,21 +1,30 @@
 const packageModel = require("../model/PackageModel")
 const Agency = require("../model/AgencyModel")
-const {imageUpload} = require("./arrayImageUpload")
+const {imageUpload,deleteImage} = require("./arrayImageUpload")
 
 exports.addPackages = async (req,res)=>{
   
    const {companyDescription,destination,destinationCategory,adult,minor,phoneCode,mobileNumber,currency,payment,packageDescription,type} = req.body
-   // const AgencyId= req.user._id
+    // const AgencyId= req.user.id
   
     console.log(type ,"this is type ")
   //  console.log(req.files)
    console.log(req.user.id)
    const file = req.files
-   
+   console.log(file,"this file from add package")
    const agencyId= req.user.id
- 
-     
+   console.log(agencyId,"this is agency id")
+  
      try{
+
+      const agency = await Agency.findById(agencyId);
+
+      console.log(agency.status,"this is agency status")
+        if(agency.status!=="Accepted"){
+         res.status(401).json({message:"You have no Access to Add Package! Wait Until Admin is Accept Your Request"})
+         return
+        }
+
        const newPackage = new packageModel({
          companyDescription,
          destination,
@@ -31,12 +40,12 @@ exports.addPackages = async (req,res)=>{
 
        })
        console.log("just above of the saving")
-       console.log(newPackage)
+      //  console.log(newPackage)
        await newPackage.save()
        const userId= newPackage._id
        if(req.files){
         
-        const imageResponse=  await imageUpload(file,userId,type)
+        const imageResponse=  await imageUpload(file,userId,type,true)
           if(imageResponse.status ===200){
             const imageUrl=imageResponse.imageUrl
           }else{
@@ -57,7 +66,8 @@ exports.addPackages = async (req,res)=>{
 
 exports.fetchPackages = async (req, res) => {
   try {
-    const id =req.user.id
+    const agencyId =req.user.id
+    // console.log(agencyId,"this is agency id from fetch packages")
     const page = parseInt(req.query.page) || 1;  
     const limit = parseInt(req.query.limit) || 4; 
     const {searchQuery,catagory}=req.query
@@ -69,7 +79,9 @@ exports.fetchPackages = async (req, res) => {
     if (catagory !== "All") {
       query.destinationCategory = new RegExp(catagory, "i");
     }
-    
+    if(agencyId){
+    query.agencyId=agencyId
+    }
     if(searchQuery){
       const regExp= new RegExp(searchQuery,"i")
       query.$or=[
@@ -84,7 +96,7 @@ exports.fetchPackages = async (req, res) => {
       .find(query) 
       .skip(skip)
       .limit(limit)
-      .populate("agencyId");
+       .populate("agencyId");
 
     const totalCount = await packageModel.countDocuments();
    if(fetchedAgency.length === 0){
@@ -157,3 +169,66 @@ exports.updateLike = async (req, res) => {
   }
 };
 
+exports.deletePackage = async (req,res)=>{
+
+ const packageId =req.query.id
+//  console.log(packageId ,"id for delete")
+ try{
+   const response = await packageModel.deleteOne({_id:packageId})
+   if(response.deletedCount ===0){
+    res.status(401).json({message:"Package is not found"})
+    return
+   }
+
+   res.status(200).json({message:"Package Deleted Successfully", response})
+ }catch(error){
+  res.status(500).json({errorMessge:"error occured while package deleting",error})
+  console.log(error)
+
+ }
+
+}
+
+
+exports.editPackage = async (req, res) => {
+  const { payment, packageDescription, packageId, removedIndex, type } = req.body;
+  const file = req.files;
+  let deletion;
+
+  try {
+    
+    await packageModel.findByIdAndUpdate(
+      packageId,
+      { packageDescription, payment },
+      { new: true }
+    );
+
+   
+    if (removedIndex && removedIndex.length > 0) {
+      deletion = await deleteImage(packageId, removedIndex);
+      console.log(deletion, "from controller");
+
+      if (deletion?.status === 200) {
+        if (file && file.length > 0) {
+          await imageUpload(file, packageId, type, false);
+        } else {
+          return res.status(400).json({
+            message: "Images required after deletion but none provided",
+          });
+        }
+      }
+    }
+
+   
+    const finalPackage = await packageModel.findById(packageId);
+
+    res.status(200).json({
+      message: "package edited successfully",
+      package: finalPackage,
+    });
+
+  } catch (error) {
+    console.log(error, "error on edit package");
+    res.status(500).json({ message: "error occurred while editing package", error });
+  }
+};

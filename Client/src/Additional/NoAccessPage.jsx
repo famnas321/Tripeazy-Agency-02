@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-function Clients() {
+function NoAccessPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center transform transition-all duration-500 hover:shadow-2xl">
@@ -29,4 +29,4 @@ function Clients() {
   );
 }
 
-export default Clients
+export default NoAccessPage

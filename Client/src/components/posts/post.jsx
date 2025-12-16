@@ -8,6 +8,8 @@ import Skeletoncom from "../Skeleton";
 import Like from "src/Additional/Like";
 import SaveToggle from "src/Additional/Save";
 
+import { useSelector } from "react-redux";
+
 const tabs = [
   { name: "Packages", path: "/posts" },
   { name: "Organized", path: "/posts/package/organized" },
@@ -23,6 +25,9 @@ const sliderSettings = {
 };
 
 const Navigation = () => {
+  
+  const hasAccess= useSelector((state) => state.auth.userInfo);
+  // console.log(hasAccess.status,"this is access from post")
   const [loading, setLoading] = useState(false);
   const [fetchedData, setFetchedData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -128,6 +133,12 @@ const Navigation = () => {
     { destinationCategory: "Adventure" },
   ];
   console.log(fetchedData,"this is fetched data")
+
+  const addPackage =()=>{
+      if(hasAccess.status=== "Accepted"){
+        navigate("/posts/package/addPackage")
+      }
+  }
   return (
     <div className="w-full ">
       <div className= "flex justify-center items-center space-x-6 shadow-md bg-white h-16 sticky -top-1 z-50">
@@ -187,7 +198,9 @@ const Navigation = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
+        
+        >
           {fetchedData.map((post, index) => {
             const isLastItem = fetchedData.length === index + 1;
             return (
@@ -195,13 +208,14 @@ const Navigation = () => {
                 key={post._id}
                 ref={isLastItem ? lastItemRef : null}
                 className="w-full bg-white rounded-lg shadow-md overflow-hidden transition-all duration-500 ease-in-out hover:shadow-xl hover:-translate-y-1"
+                onClick={() => handleNavigation(post._id)}
               >
                 {post.images && (
                   <Slider {...sliderSettings}>
                     {post.images.map((img, i) => (
                       <div key={i}>
                         <img
-                          src={img}
+                          src={img.url}
                           alt={`Post ${i + 1}`}
                           className="w-full h-40 object-cover"
                         />
@@ -235,10 +249,11 @@ const Navigation = () => {
                     <Like 
                           packageId={post._id}
                           like={post.likeCount}
+                          likeCount={post.likeCount}
                           likedBy={post.likedBy}
                           onToggle={() => setLikeToggle(prev => !prev)}
                         />
-                      <p>{post.likeCount}</p>
+                     
                       <SaveToggle />
                     </div>
                   </div>
@@ -263,12 +278,12 @@ const Navigation = () => {
       <div style={{ height: "100px" }}></div>
 
       <div className="fixed bottom-5 right-5">
-        <NavLink
-          to="/posts/package/addPackage"
+        <button
+           onClick={addPackage}
           className="bg-blue-500 text-white text-3xl w-16 h-16 flex items-center justify-center rotate-45 rounded-3xl"
         >
           ×
-        </NavLink>
+        </button>
       </div>
     </div>
   );

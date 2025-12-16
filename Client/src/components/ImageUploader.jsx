@@ -43,6 +43,7 @@ const ImageUploader = ({ formData, setformData, type }) => {
   };
 
   const handleDelete = async (url) => {
+    console.log("this is delting")
     if (!url) return alert("No image to delete");
 
     setLoading(true);

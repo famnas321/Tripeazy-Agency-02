@@ -7,18 +7,24 @@ function RestrictRoute({ children }) {
   const authData = useSelector((state) => state.auth.userInfo);
   const [hasAccess, setHasAccess] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
-    if (authData?.status === 'Accepted') {
-      setHasAccess(true);
+    if (authData === undefined || authData === null) {
+      // still waiting for auth state to be resolved
+      setLoading(true);
     } else {
-      setHasAccess(false);
-      setShowPopup(true); 
+      setLoading(false);
+
+      if (authData?.status === 'Accepted') {
+        setHasAccess(true);
+      } else {
+        setHasAccess(false);
+        setShowPopup(true);
+      }
     }
   }, [authData]);
 
-  
   const handleClick = useCallback(() => {
     if (!hasAccess) {
       setShowPopup(true);
@@ -35,8 +41,12 @@ function RestrictRoute({ children }) {
     };
   }, [hasAccess, handleClick]);
 
+  if (loading) {
+    return <div>Loading...</div>; // or a spinner
+  }
+
   if (!authData) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return (
